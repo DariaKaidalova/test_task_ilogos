@@ -1,0 +1,169 @@
+.g-clearfix:after {
+  visibility: hidden;
+	display: block;
+	content: "";
+	clear: both;
+	height: 0;
+}
+.l-html, .l-body {
+	height: 100%;
+} 
+.l-body {
+  background: #f8f5f5;
+  color: #000;
+  font: normal 15px/1.4 'Libre Franklin', sans-serif;
+}
+
+.l-page {
+	position: relative;
+  min-height: 100%;
+}
+
+.b-header {
+	background: #2a2929;
+}
+
+.b-header__inner, .b-content__inner {
+	position: relative;
+	max-width: 1000px;
+	min-width: 600px;
+	margin: 0 auto;
+}
+
+.b-header__inner {
+	padding: 23px 10px 20px;
+	color: #fff;
+	text-align: center;
+}
+
+.b-header__title {
+	margin: 0;
+	display: inline-block;
+	font: 25px/1.3 'Indie Flower', cursive;
+}
+
+.b-content {
+	min-height: calc(100vh - 75px);
+}
+
+.b-content__inner {
+	padding: 30px 10px;
+	min-height: calc(100vh - 135px);
+}
+
+.b-content__columnLeft {
+  padding: 0 30px 0 0;
+	overflow: hidden;
+  border-right: 1px solid #ccc;
+  min-height: calc(100vh - 135px);
+}
+
+.b-content__columnLeft, .b-sidebar {
+	min-height: calc(100vh - 135px);
+}
+
+.b-sidebar {
+	float: right;
+	width: 320px;
+	margin: 0 0 0 20px;
+	text-align: right;
+}
+
+.b-table {
+  width: 100%;
+  text-align: left;
+  font-size: 15px;
+}
+
+.b-table thead {
+	border-bottom: 1px solid  #000;
+}
+.b-table tr {
+	border-bottom: 1px solid  #ccc;
+}
+.b-table thead tr {
+	border: 0;
+	text-transform: uppercase;
+	font: 16px/1.3 'Indie Flower', cursive;
+}
+.b-table td {
+	padding: 10px 20px;
+}
+.b-table th {
+	padding: 0 20px 15px;
+
+}
+
+.l-control {
+	display: inline-block;
+	text-align: left;
+}
+.b-control {
+	float: left;
+	margin: 0 15px 0 0;
+}
+.b-control:last-child {
+	margin-right: 0;
+}
+
+
+/*field*/
+.b-control__field {
+  display: block;
+  width: 200px;
+  padding: 10px 15px;
+  -moz-box-sizing: border-box; 
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 15px;
+}
+.b-control__field:focus {
+	outline: 0;
+}
+.b-control__field ::-webkit-input-placeholder {
+	color: #ccc;
+	font-size: 14px;
+}
+.b-control__field :-moz-placeholder { /* Firefox 18- */
+	color: #ccc;
+	font-size: 14px;  
+}
+.b-control__field ::-moz-placeholder {  /* Firefox 19+ */
+	color: #ccc; 
+	font-size: 14px;  
+}
+.b-control__field :-ms-input-placeholder {  
+	color: #ccc; 
+	font-size: 14px;  
+}
+
+.b-button {
+	outline: 0;
+	display: inline-block;
+  min-width: 100px;
+  min-height: 35px;
+  padding: 11px 5px;
+	-moz-box-sizing: border-box; 
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 0;
+  background: #4682B4;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	color: #fff;
+	text-transform: uppercase;
+	text-decoration: none;
+	text-align: center;
+	font: 13px/1.3 'Indie Flower', cursive;
+	font-weight: bold;
+}
+.b-button:hover, .b-button:focus {
+	outline: 0;
+	text-decoration: none;
+}
+
+
+
+
