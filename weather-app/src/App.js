@@ -84,7 +84,7 @@ class Main extends React.Component {
 		return  (
 			<main className={b-content}>
 				<div className={b-content__inner g-clearfix}>
-					<Sidebar />,
+					<Sidebar />
 					<Columnleft />
 				</div>
 			</main>
