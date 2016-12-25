@@ -1,7 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+//import ReactDOM from 'react-dom';
 import './normalize.css';
 import './main.css';
+
+var clearfix = 'g-clearfix';
 
 class Tablerow extends React.Component {
 	render() {
@@ -14,10 +16,11 @@ class Tablerow extends React.Component {
 	}
 }
 
-class Table extends React.Component {
+var table = 'b-table';
+class Maintable extends React.Component {
 	render() {
 		return  (
-			<table className={b-table}>
+			<table className={table}>
         <thead>
           <tr>
             <th>City or town</th>
@@ -32,20 +35,27 @@ class Table extends React.Component {
 	}
 }
 
+var columnLeft = 'b-content__columnLeft';
 class Columnleft extends React.Component {
 	render() {
 		return  (
-			<div className={b-content__columnLeft}>
-				<Table />
+			<div className={columnLeft}>
+				<Maintable />
 			</div>
 		);
 	}
 }
 
+var controlsWrap = 'l-control',
+		control = 'b-control', 
+		floatLeft = '-float_left',
+		button = 'b-button',
+		field = 'b-field';
+
 class Addbutton extends React.Component {
 	render() {
 		return  (
-			<button className={b-button}>Add</button>
+			<div className={control +' ' + floatLeft}><button className={button}>Add</button></div>
 		);
 	}
 }
@@ -53,37 +63,40 @@ class Addbutton extends React.Component {
 class Addfield extends React.Component {
 	render() {
 		return  (
-			<input  className={b-control__field} type="text" placeholder="Add town or city">
+			<div className={control +' ' + floatLeft}><input  className={field} type="text" placeholder="Add town or city"/></div>
 		);
 	}
 }
 
 class Controlswrap extends React.Component {
-	render() {
-		return  (
-			<div className={l-control g-clearfix}>
-				<div className={b-control -float_left}><Addfield /></div>
-				<div className={b-control -float_left}><Addbutton /></div>
+	render(){
+		return(
+			<div className={controlsWrap + ' ' + clearfix}>
+				<Addfield/>
+				<Addbutton/>
 			</div>
 		);
 	}
 }
 
+var sidebar = 'b-sidebar';
 class Sidebar extends React.Component {
 	render() {
 		return  (
-			<aside className={b-sidebar}>
+			<aside className={sidebar}>
 				<Controlswrap />
 			</aside>
 		);
 	}
 }
 
+var content = 'b-content',
+		contentInner = 'b-content__inner';
 class Main extends React.Component {
 	render() {
 		return  (
-			<main className={b-content}>
-				<div className={b-content__inner g-clearfix}>
+			<main className={content}>
+				<div className={contentInner+ ' ' + clearfix}>
 					<Sidebar />
 					<Columnleft />
 				</div>
@@ -92,23 +105,29 @@ class Main extends React.Component {
 	}
 }
 
+var header = 'b-header',
+		headerInner = 'b-header__inner',
+		headerTitle = 'b-header__title';
 class Header extends React.Component {
 	render() {
 		return  (
-			<header className={b-header}>
-        <div className={b-header__inner}>
-          <h1 className={b-header__title}>Let&#039;s find out the weather forecast!</h1>
+			<header className={header}>
+        <div className={headerInner}>
+          <h1 className={headerTitle}>Let&#039;s find out the weather forecast!</h1>
         </div>
       </header>
 		);
 	}
 }
 
-class App extends extends React.Component {
+var page = 'b-page';
+class App extends React.Component {
 	render() {
 		return  (
-			<Header />
-			<Main />
+			<div className={page}>
+				<Header />
+				<Main />
+			</div>
 		);
 	}
 }

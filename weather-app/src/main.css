@@ -108,7 +108,7 @@
 
 
 /*field*/
-.b-control__field {
+.b-field {
   display: block;
   width: 200px;
   padding: 10px 15px;
@@ -118,22 +118,22 @@
   border-radius: 3px;
   font-size: 15px;
 }
-.b-control__field:focus {
+.b-field:focus {
 	outline: 0;
 }
-.b-control__field ::-webkit-input-placeholder {
+.b-field ::-webkit-input-placeholder {
 	color: #ccc;
 	font-size: 14px;
 }
-.b-control__field :-moz-placeholder { /* Firefox 18- */
+.b-field :-moz-placeholder { /* Firefox 18- */
 	color: #ccc;
 	font-size: 14px;  
 }
-.b-control__field ::-moz-placeholder {  /* Firefox 19+ */
+.b-field ::-moz-placeholder {  /* Firefox 19+ */
 	color: #ccc; 
 	font-size: 14px;  
 }
-.b-control__field :-ms-input-placeholder {  
+.b-field :-ms-input-placeholder {  
 	color: #ccc; 
 	font-size: 14px;  
 }
