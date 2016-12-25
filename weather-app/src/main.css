@@ -164,6 +164,20 @@
 	text-decoration: none;
 }
 
+.b-message {
+	display: none;
+	margin: 7px 0 0;
+	clear: both;
+	color: green;
+	text-align: center;
+}
+.b-message.-type_error {
+	color: red;
+}
+.b-message.-type_warning {
+	color: yellow;
+}
+
 
 
 

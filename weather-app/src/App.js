@@ -3,7 +3,34 @@ import React from 'react';
 import './normalize.css';
 import './main.css';
 
-var clearfix = 'g-clearfix';
+var clearfix = 'g-clearfix',
+error ='b-message -type_error'//, 
+// warning = 'b-message -type_warning',
+// message =  'b-message';
+
+// class Message extends React.Component {
+// 	render() {
+// 		return  (
+// 			<div className={message}></div>
+// 		);
+// 	}
+// }
+
+// class Messagewarning extends React.Component {
+// 	render() {
+// 		return  (
+// 			<div className={warning}></div>
+// 		);
+// 	}
+// }
+
+class Messageerror extends React.Component {
+	render() {
+		return  (
+			<div className={error} id="js-addFieldError">Please enter the city.</div>
+		);
+	}
+}
 
 class Tablerow extends React.Component {
 	render() {
@@ -51,11 +78,55 @@ var controlsWrap = 'l-control',
 		floatLeft = '-float_left',
 		button = 'b-button',
 		field = 'b-field';
-
+	
 class Addbutton extends React.Component {
+	constructor(props) {
+    super(props);
+    this.state = {
+    	isError: false,
+    	items: []
+    };
+
+    this.makeRequest = this.makeRequest.bind(this); //This binding is necessary to make `this` work in the callback
+  }
+
+  makeRequest(e) {
+  	console.log('work');
+
+		e.preventDefault();
+
+		var addField = document.getElementById('js-addField'),
+				addFieldError = document.getElementById('js-addFieldError'),
+		    addFieldValue = addField.value;
+
+	  console.log(addFieldError);
+
+    const displayError = {
+    	display: 'block'
+    }
+
+		if( addFieldValue === 'underfined' || addFieldValue === ' ' ) {
+			console.log('addFieldValue', addFieldValue);
+
+			this.setState(prevState => ({
+      	isError: !prevState.isError
+    	}));
+
+    	addFieldError.style = displayError;
+		}
+		else {
+			addFieldError.style = '';
+			fetch('api.openweathermap.org/data/2.5/weather?q='+addFieldValue)
+			.then(response => response.json())
+			.then( ({results:items}) => this.setState({items}));
+
+			let items = this.state.items
+			console.log(items);
+		}
+  }
 	render() {
 		return  (
-			<div className={control +' ' + floatLeft}><button className={button}>Add</button></div>
+			<div className={control +' ' + floatLeft}><a onClick={this.makeRequest} className={button} href="">Add</a></div>
 		);
 	}
 }
@@ -63,7 +134,7 @@ class Addbutton extends React.Component {
 class Addfield extends React.Component {
 	render() {
 		return  (
-			<div className={control +' ' + floatLeft}><input  className={field} type="text" placeholder="Add town or city"/></div>
+			<div className={control +' ' + floatLeft}><input id="js-addField" className={field} type="text" placeholder="Add town or city"/></div>
 		);
 	}
 }
@@ -85,6 +156,7 @@ class Sidebar extends React.Component {
 		return  (
 			<aside className={sidebar}>
 				<Controlswrap />
+				<Messageerror/>
 			</aside>
 		);
 	}
