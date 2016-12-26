@@ -3,6 +3,49 @@ import ReactDOM from 'react-dom';
 import './normalize.css';
 import './main.css';
 
+var watchId;
+function startWatch() {
+	if(navigator.geolocation) {
+		var optn = {
+			enableHighAccuracy: true,
+			timeout: Infinity,
+			maximumAge: 0
+		};
+		watchId = navigator.geolocation.getCurrentPosition(showPosition, showError, optn);
+		console.log(navigator.geolocation.getCurrentPosition(showPosition, showError, optn));
+	} else {
+		alert('Geolocation is not supported in your browser');
+	}
+
+	function showPosition(position) {
+		document.write('Latitude: '+position.coords.latitude+'Longitude: '+position.coords.longitude);
+	}
+
+	function showError(error) {
+		switch(error.code) {
+			case error.PERMISSION_DENIED:
+				alert("User denied the request for Geolocation.");
+				break;
+			case error.POSITION_UNAVAILABLE:
+				alert("Location information is unavailable.");
+				break;
+			case error.TIMEOUT:
+				alert("The request to get user location timed out.");
+				break;
+			case error.UNKNOWN_ERROR:
+				alert("An unknown error occurred.");
+				break;
+		}
+	}
+}
+
+function stopWatch() {
+ if (watchId) {
+		navigator.geolocation.clearWatch(watchId);
+		watchId = null;
+	}
+}
+
 var clearfix = 'g-clearfix',
 		message =  'b-message',
 		error ='b-message -type_error', 
