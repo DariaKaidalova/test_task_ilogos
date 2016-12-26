@@ -44,14 +44,22 @@ class Messageerror extends React.Component {
 		);
 	}
 }*/
-
+var tableWeather = 'b-table__weather';
 var Weather = React.createClass({
   render: function(props) {
     return (
   		<tr>
   			<td>{this.props.city}</td>
   			<td>{this.props.coord}</td>
-  			<td>/*{this.props.response}*/</td>
+  			<td>
+  				<div className={tableWeather}>{this.props.descr}</div>
+  				<div className={tableWeather}>{this.props.temp}</div>
+  				<div className={tableWeather}>{this.props.minTemp}</div>
+  				<div className={tableWeather}>{this.props.maxTemp}</div>
+  				<div className={tableWeather}>{this.props.pressure}</div>
+  				<div className={tableWeather}>{this.props.humidity}</div>
+  				<div className={tableWeather}>{this.props.wind}</div>
+  			</td>
 			</tr>
   	)
   }
@@ -118,15 +126,23 @@ class Addbutton extends React.Component {
 			cityReq.onreadystatechange = (e) => {
 			  if (cityReq.readyState !== 4) return;
 			  if (cityReq.status === 200) {
-			    var cityWeater = JSON.parse(cityReq.responseText);
-			    var coord = cityWeater.coord,
-			    		cityLat = coord.lat,
-			    		cityLon = coord.lon,
-			    		cityCoord = 'lon: '+ cityLon + ', ' + 'lat: '+cityLat;
-			    console.log(cityWeater.coord);
-		    	
-					ReactDOM.render(<Weather city={cityName} coord={cityCoord}/>, tbody);
+			    var currentWeather = JSON.parse(cityReq.responseText);
+			    var coord = currentWeather.coord,
+			    		cityCoord = 'Lon: '+ coord.lon + ', lat: '+coord.lat,
+	    				weather = currentWeather.weather, weatherArray =  weather[0],
+	    				main = currentWeather.main,
+	    				wind = currentWeather.wind,
+	    				cityDescr = 'Weather: ' + weatherArray.description,
+	    				cityTemp = 'temperature: ' + main.temp + ' °C',
+	    				cityMinTemp = 'Minimum temperature: ' + main.temp_min + ' °C',
+	    				cityMaxTemp = 'Maximum temperature: ' + main.temp_max + ' °C',
+	    				cityPressure = 'Pressure: ' + main.pressure +' hpa',
+	    				cityHumidity = 'humidity: ' + main.humidity+'%',
+    					cityWind = 'wind: ' + wind.speed+' m/s';
 
+	    				cityconsole.log(currentWeather);
+
+					ReactDOM.render(<Weather city={cityName} coord={cityCoord} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}, tbody);
 					ReactDOM.unmountComponentAtNode(messageContainer);
 			  } else {
 			    ReactDOM.render(<Messageerror/>, messageContainer);
