@@ -94,11 +94,7 @@ var controlsWrap = 'l-control',
 class Addbutton extends React.Component {
 	constructor(props) {
     super(props);
-    this.state = {
-    	isError: false,
-    	jsonResp: ''
-    };
-
+    this.state = {};
     this.makeRequest = this.makeRequest.bind(this); //This binding is necessary to make `this` work in the callback
   }
 
@@ -106,7 +102,6 @@ class Addbutton extends React.Component {
 		e.preventDefault();
 
 		var addField = document.getElementById('js-addField'),
-				//addFieldError = document.getElementById('js-addFieldError'),
 		    addFieldValue = addField.value,
 		    tbody = document.getElementById('js-tbody'),
 		    messageContainer = document.getElementById('js-messageContainer');
