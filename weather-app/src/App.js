@@ -111,15 +111,6 @@ class Addbutton extends React.Component {
 		    tbody = document.getElementById('js-tbody'),
 		    messageContainer = document.getElementById('js-messageContainer');
 
-		/*if(addFieldValue === 'underfined' || addFieldValue === ' ') {
-			
-			this.setState(prevState => ({
-      	isError: !prevState.isError
-    	}));
-
-			ReactDOM.render(<Messageerror/>, messageContainer);
-		}
-		else {*/
 			var url = 'http://api.openweathermap.org/data/2.5/weather?q='+addFieldValue+'&appid=1cf63a228c90f35807d7814f738e9d6d';
 
 			var cityReq = new XMLHttpRequest();
@@ -130,13 +121,13 @@ class Addbutton extends React.Component {
 			  if (cityReq.readyState !== 4) return;
 			  if (cityReq.status === 200) {
 			    var	jsonResp = cityReq.responseText;
+		    	ReactDOM.unmountComponentAtNode(messageContainer);
 					ReactDOM.render(<Weather response={jsonResp}/>, tbody);
 			  } else {
 			    console.warn('error');
 			    ReactDOM.render(<Messageerror/>, messageContainer);
 			  }
 			};
-		//}
   }
 
 	render() {
