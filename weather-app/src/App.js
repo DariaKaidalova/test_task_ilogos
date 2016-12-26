@@ -30,9 +30,18 @@ class Messageerror extends React.Component {
 }
 
 class Removebutton extends React.Component {
+	constructor(props) {
+    super(props);
+    this.state = {};
+    this.removeCity = this.removeCity.bind(this); //This binding is necessary to make 'this' work in the callback
+  }
+
+  removeCity(e) {
+  	e.preventDefault();
+  }
 	render() {
 		return  (
-			<a className={button} href="">Remove</a> 
+			<a className={button} href="" onClick={this.makeRequest}>Remove</a> 
 		);
 	}
 }
