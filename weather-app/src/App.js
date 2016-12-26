@@ -48,7 +48,7 @@ var Weather = React.createClass({
   render: function(props) {
     return (
   		<tr>
-  			<td>azazaza</td>
+  			<td>this.props.city</td>
   			<td>{this.props.response}</td>
 			</tr>
   	)
@@ -95,18 +95,18 @@ class Addbutton extends React.Component {
 	constructor(props) {
     super(props);
     this.state = {};
-    this.makeRequest = this.makeRequest.bind(this); //This binding is necessary to make `this` work in the callback
+    this.makeRequest = this.makeRequest.bind(this); //This binding is necessary to make 'this' work in the callback
   }
 
   makeRequest(e) {
 		e.preventDefault();
 
 		var addField = document.getElementById('js-addField'),
-		    addFieldValue = addField.value,
+		    cityName = addField.value,
 		    tbody = document.getElementById('js-tbody'),
 		    messageContainer = document.getElementById('js-messageContainer');
 
-			var url = 'http://api.openweathermap.org/data/2.5/weather?q='+addFieldValue+'&appid=1cf63a228c90f35807d7814f738e9d6d';
+			var url = 'http://api.openweathermap.org/data/2.5/weather?q='+cityName+'&appid=1cf63a228c90f35807d7814f738e9d6d';
 
 			var cityReq = new XMLHttpRequest();
 			cityReq.open('GET', url);
@@ -117,9 +117,8 @@ class Addbutton extends React.Component {
 			  if (cityReq.status === 200) {
 			    var	jsonResp = cityReq.responseText;
 		    	ReactDOM.unmountComponentAtNode(messageContainer);
-					ReactDOM.render(<Weather response={jsonResp}/>, tbody);
+					ReactDOM.render(<Weather city={cityName} response={jsonResp}/>, tbody);
 			  } else {
-			    console.warn('error');
 			    ReactDOM.render(<Messageerror/>, messageContainer);
 			  }
 			};
