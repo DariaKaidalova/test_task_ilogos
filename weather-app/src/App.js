@@ -117,10 +117,10 @@ class Addbutton extends React.Component {
 		    tbody = document.getElementById('js-tbody'),
 		    messageContainer = document.getElementById('js-messageContainer');
 
-			var url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&appid=1cf63a228c90f35807d7814f738e9d6d';
+			var url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
 
 			ReactDOM.unmountComponentAtNode(messageContainer);
-			
+
 			var cityReq = new XMLHttpRequest();
 			cityReq.open('GET', url);
 			cityReq.send();
@@ -129,6 +129,8 @@ class Addbutton extends React.Component {
 			  if (cityReq.readyState !== 4) return;
 			  if (cityReq.status === 200) {
 			    var currentWeather = JSON.parse(cityReq.responseText);
+			    console.log(cityReq.responseText);
+			    console.log(currentWeather);
 			    var cityName = currentWeather.name, 
 			    		coord = currentWeather.coord,
 			    		cityCoord = 'Lon: '+ coord.lon + ', Lat: '+coord.lat,
@@ -137,7 +139,7 @@ class Addbutton extends React.Component {
 	    				wind = currentWeather.wind,
 	    				cityDescr = 'Weather: ' + weatherArray.description,
 	    				cityTemp = 'Temperature: ' + main.temp + ' °C',
-	    				cityMinTemp = 'Minimum temperature: ' + main.temp_min + ' °C',
+	    				cityMinTemp = 'Minimum temperature: ' + main.temp_min+ ' °C',
 	    				cityMaxTemp = 'Maximum temperature: ' + main.temp_max + ' °C',
 	    				cityPressure = 'Pressure: ' + main.pressure +' hpa',
 	    				cityHumidity = 'Humidity: ' + main.humidity + '%',
