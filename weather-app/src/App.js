@@ -36,8 +36,8 @@ class Removebutton extends React.Component {
 		);
 	}
 }
-
-var tableWeather = 'b-table__weather',
+var table = 'b-table',
+    tableWeather = 'b-table__weather',
 		tableWeatherItem = 'b-table__weatherItem',
 		tableCity = 'b-table__city',
 		tableCoord = 'b-table__coord ',
@@ -45,7 +45,7 @@ var tableWeather = 'b-table__weather',
 var Weather = React.createClass({
   render: function(props) {
     return (
-  		<tr>
+  		<tr name={this.props.city}>
   			<td className={tableCity}>{this.props.city}</td>
   			<td className={tableCoord}>{this.props.coord}</td>
   			<td className={tableWeather}>
@@ -63,7 +63,6 @@ var Weather = React.createClass({
   }
 });
 
-var table = 'b-table';
 class Maintable extends React.Component {
 	render() {
 		return  (
@@ -103,15 +102,14 @@ class Addbutton extends React.Component {
 
   makeRequest(e) {
 		e.preventDefault();
-		
 
 		var addField = document.getElementById('js-addField'),
-		    cityName = addField.value,
+		    city = addField.value,
 		    tbody = document.getElementById('js-tbody'),
 		    messageContainer = document.getElementById('js-messageContainer');
 
-			var url = 'http://api.openweathermap.org/data/2.5/weather?q='+cityName+'&appid=1cf63a228c90f35807d7814f738e9d6d';
-			
+			var url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&appid=1cf63a228c90f35807d7814f738e9d6d';
+
 			ReactDOM.unmountComponentAtNode(messageContainer);
 			var cityReq = new XMLHttpRequest();
 			cityReq.open('GET', url);
@@ -121,7 +119,8 @@ class Addbutton extends React.Component {
 			  if (cityReq.readyState !== 4) return;
 			  if (cityReq.status === 200) {
 			    var currentWeather = JSON.parse(cityReq.responseText);
-			    var coord = currentWeather.coord,
+			    var cityName = currentWeather.name, 
+			    		coord = currentWeather.coord,
 			    		cityCoord = 'Lon: '+ coord.lon + ', Lat: '+coord.lat,
 	    				weather = currentWeather.weather, weatherArray =  weather[0],
 	    				main = currentWeather.main,
