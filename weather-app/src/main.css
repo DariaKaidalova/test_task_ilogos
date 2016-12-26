@@ -164,10 +164,12 @@
 	text-decoration: none;
 }
 
-.b-message {
-	display: none;
+.l-message {
 	margin: 7px 0 0;
 	clear: both;
+}
+
+.b-message {
 	color: green;
 	text-align: center;
 }

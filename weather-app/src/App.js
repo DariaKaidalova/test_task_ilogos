@@ -1,12 +1,13 @@
 import React from 'react';
-//import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import './normalize.css';
 import './main.css';
 
 var clearfix = 'g-clearfix',
-error ='b-message -type_error'//, 
+		error ='b-message -type_error', 
+		messageContainer = 'l-message';
 // warning = 'b-message -type_warning',
-// message =  'b-message';
+// message =  'b-message'
 
 // class Message extends React.Component {
 // 	render() {
@@ -43,6 +44,17 @@ class Tablerow extends React.Component {
 	}
 }
 
+var Weather = React.createClass({
+  render: function(props) {
+    return (
+  		<tr>
+  			<td>azazaza</td>
+  			<td>{this.props.response}</td>
+			</tr>
+  	)
+  }
+});
+
 var table = 'b-table';
 class Maintable extends React.Component {
 	render() {
@@ -54,7 +66,7 @@ class Maintable extends React.Component {
             <th>Weather forecast</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="js-tbody">
         	<Tablerow />
         </tbody>
       </table>
@@ -84,46 +96,49 @@ class Addbutton extends React.Component {
     super(props);
     this.state = {
     	isError: false,
-    	items: []
+    	jsonResp: ''
     };
 
     this.makeRequest = this.makeRequest.bind(this); //This binding is necessary to make `this` work in the callback
   }
 
   makeRequest(e) {
-  	console.log('work');
-
 		e.preventDefault();
 
 		var addField = document.getElementById('js-addField'),
-				addFieldError = document.getElementById('js-addFieldError'),
-		    addFieldValue = addField.value;
+				//addFieldError = document.getElementById('js-addFieldError'),
+		    addFieldValue = addField.value,
+		    tbody = document.getElementById('js-tbody'),
+		    messageContainer = document.getElementById('js-messageContainer');
 
-	  console.log(addFieldError);
-
-    const displayError = {
-    	display: 'block'
-    }
-
-		if( addFieldValue === 'underfined' || addFieldValue === ' ' ) {
-			console.log('addFieldValue', addFieldValue);
-
+		/*if(addFieldValue === 'underfined' || addFieldValue === ' ') {
+			
 			this.setState(prevState => ({
       	isError: !prevState.isError
     	}));
 
-    	addFieldError.style = displayError;
+			ReactDOM.render(<Messageerror/>, messageContainer);
 		}
-		else {
-			addFieldError.style = '';
-			fetch('api.openweathermap.org/data/2.5/weather?q='+addFieldValue)
-			.then(response => response.json())
-			.then( ({results:items}) => this.setState({items}));
+		else {*/
+			var url = 'http://api.openweathermap.org/data/2.5/weather?q='+addFieldValue+'&appid=1cf63a228c90f35807d7814f738e9d6d';
 
-			let items = this.state.items
-			console.log(items);
-		}
+			var cityReq = new XMLHttpRequest();
+			cityReq.open('GET', url);
+			cityReq.send();
+
+			cityReq.onreadystatechange = (e) => {
+			  if (cityReq.readyState !== 4) return;
+			  if (cityReq.status === 200) {
+			    var	jsonResp = cityReq.responseText;
+					ReactDOM.render(<Weather response={jsonResp}/>, tbody);
+			  } else {
+			    console.warn('error');
+			    ReactDOM.render(<Messageerror/>, messageContainer);
+			  }
+			};
+		//}
   }
+
 	render() {
 		return  (
 			<div className={control +' ' + floatLeft}><a onClick={this.makeRequest} className={button} href="">Add</a></div>
@@ -156,7 +171,7 @@ class Sidebar extends React.Component {
 		return  (
 			<aside className={sidebar}>
 				<Controlswrap />
-				<Messageerror/>
+				<div className={messageContainer} id="js-messageContainer"></div>
 			</aside>
 		);
 	}
