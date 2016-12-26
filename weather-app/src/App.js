@@ -120,6 +120,7 @@ class Addbutton extends React.Component {
 			var url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&appid=1cf63a228c90f35807d7814f738e9d6d';
 
 			ReactDOM.unmountComponentAtNode(messageContainer);
+			
 			var cityReq = new XMLHttpRequest();
 			cityReq.open('GET', url);
 			cityReq.send();
