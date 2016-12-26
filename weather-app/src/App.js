@@ -33,23 +33,25 @@ class Messageerror extends React.Component {
 	}
 }
 
-class Tablerow extends React.Component {
+/*class Tablerow extends React.Component {
 	render() {
 		return  (
 			<tr>
 				<td>test</td>
 				<td>test</td>
+				<td></>
 			</tr>
 		);
 	}
-}
+}*/
 
 var Weather = React.createClass({
   render: function(props) {
     return (
   		<tr>
-  			<td>this.props.city</td>
-  			<td>{this.props.response}</td>
+  			<td>{this.props.city}</td>
+  			<td>{this.props.coord}</td>
+  			<td>/*{this.props.response}*/</td>
 			</tr>
   	)
   }
@@ -63,11 +65,12 @@ class Maintable extends React.Component {
         <thead>
           <tr>
             <th>City or town</th>
+            <th>Coordinates</th>
             <th>Weather forecast</th>
           </tr>
         </thead>
         <tbody id="js-tbody">
-        	<Tablerow />
+        
         </tbody>
       </table>
 		);
@@ -115,9 +118,16 @@ class Addbutton extends React.Component {
 			cityReq.onreadystatechange = (e) => {
 			  if (cityReq.readyState !== 4) return;
 			  if (cityReq.status === 200) {
-			    var	jsonResp = cityReq.responseText;
-		    	ReactDOM.unmountComponentAtNode(messageContainer);
-					ReactDOM.render(<Weather city={cityName} response={jsonResp}/>, tbody);
+			    var cityWeater = JSON.parse(cityReq.responseText);
+			    var coord = cityWeater.coord,
+			    		cityLat = coord.lat,
+			    		cityLon = coord.lon,
+			    		cityCoord = 'lon: '+ cityLon + ', ' + 'lat: '+cityLat;
+			    console.log(cityWeater.coord);
+		    	
+					ReactDOM.render(<Weather city={cityName} coord={cityCoord}/>, tbody);
+
+					ReactDOM.unmountComponentAtNode(messageContainer);
 			  } else {
 			    ReactDOM.render(<Messageerror/>, messageContainer);
 			  }
