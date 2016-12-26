@@ -5,6 +5,7 @@
 	clear: both;
 	height: 0;
 }
+
 .l-html, .l-body {
 	height: 100%;
 } 
@@ -13,55 +14,51 @@
   color: #000;
   font: normal 15px/1.4 'Libre Franklin', sans-serif;
 }
-
 .l-page {
 	position: relative;
   min-height: 100%;
 }
 
+/*header*/
 .b-header {
 	background: #2a2929;
 }
-
 .b-header__inner, .b-content__inner {
 	position: relative;
 	max-width: 1100px;
 	min-width: 600px;
 	margin: 0 auto;
 }
-
 .b-header__inner {
 	padding: 23px 10px 20px;
 	color: #fff;
 	text-align: center;
 }
-
 .b-header__title {
 	margin: 0;
 	display: inline-block;
 	font: 25px/1.3 'Indie Flower', cursive;
 }
 
+/*content*/
 .b-content {
 	min-height: calc(100vh - 75px);
 }
-
 .b-content__inner {
 	padding: 30px 10px;
 	min-height: calc(100vh - 135px);
 }
-
 .b-content__columnLeft {
   padding: 0 30px 0 0;
 	overflow: hidden;
   border-right: 1px solid #ccc;
   min-height: calc(100vh - 135px);
 }
-
 .b-content__columnLeft, .b-sidebar {
 	min-height: calc(100vh - 135px);
 }
 
+/*sidebar*/
 .b-sidebar {
 	float: right;
 	width: 320px;
@@ -69,12 +66,12 @@
 	text-align: right;
 }
 
+/*table*/
 .b-table {
   width: 100%;
   text-align: left;
   font-size: 15px;
 }
-
 .b-table thead {
 	border-bottom: 1px solid  #000;
 }
@@ -108,6 +105,8 @@
 .b-table__weatherItem:last-child {
 	margin-bottom: 0;
 }
+
+/*control*/
 .l-control {
 	display: inline-block;
 	text-align: left;
@@ -120,7 +119,32 @@
 	margin-right: 0;
 }
 
+/*current weather*/
+.l-currentWeather {
+	margin: 40px 0 0;
+	clear: both;
+	text-align: left;
+}
+.b-currentWeather {
+	display: block;
+	padding: 0 5px 0;
+	margin: 0;
+	list-style: none;
+}
+.b-currentWeather__item {
+  margin: 0 0 7px;
+}
+.b-currentWeather__title {}
+.b-currentWeather__val {}
 
+.b-title {
+	margin: 0 0 20px;
+  padding: 0 5px 10px;
+  border-bottom: 1px solid #000;
+	font: 27px/1 'Indie Flower', cursive;
+	text-align: center;
+	text-transform: uppercase;
+}
 /*field*/
 .b-field {
   display: block;
@@ -152,6 +176,7 @@
 	font-size: 14px;  
 }
 
+/*button*/
 .b-button {
 	outline: 0;
 	display: inline-block;
@@ -178,11 +203,12 @@
 	text-decoration: none;
 }
 
+/*message*/
 .l-message {
+	min-height: 21px;
 	margin: 7px 0 0;
 	clear: both;
 }
-
 .b-message {
 	color: green;
 	text-align: center;

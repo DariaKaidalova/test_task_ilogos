@@ -11,7 +11,8 @@ var clearfix = 'g-clearfix',
 		control = 'b-control', 
 		floatLeft = '-float_left',
 		button = 'b-button',
-		field = 'b-field';
+		field = 'b-field',
+		title = 'b-title';
 
 class Message extends React.Component {
 	render() {
@@ -180,6 +181,30 @@ class Controlswrap extends React.Component {
 		);
 	}
 }
+var currentWeatherWrap = 'l-currentWeather',
+		currentWeather = 'b-currentWeather',
+		currentWeatherItem ='b-currentWeather__item',
+		currentWeatherTitle = 'b-currentWeather__title',
+		currentWeatherVal = 'b-currentWeather__val';
+class Currentweather extends React.Component {
+	render(){
+		return(
+		<div className={currentWeatherWrap}>
+			<h2 className={title}>Weather in Kharkiv, UA</h2>
+			<ul className={currentWeather}>
+				<li className={currentWeatherItem}>
+					<span className={currentWeatherTitle}>test: </span>
+					<span className={currentWeatherVal}>test</span>
+				</li>
+				<li className={currentWeatherItem}>
+					<span className={currentWeatherTitle}>test: </span>
+					<span className={currentWeatherVal}>test</span>
+				</li>
+			</ul>
+		</div>
+		);
+	}
+}
 
 var sidebar = 'b-sidebar';
 class Sidebar extends React.Component {
@@ -188,6 +213,7 @@ class Sidebar extends React.Component {
 			<aside className={sidebar}>
 				<Controlswrap />
 				<div className={messageContainer} id="js-messageContainer"></div>
+				<Currentweather/>
 			</aside>
 		);
 	}
