@@ -97,7 +97,7 @@ var table = 'b-table',
 		tableCoord = 'b-table__coord ',
 		tableRemoval = 'b-table__removal';
 
-var rawArray = [];
+const children = [];
 
 var Weather = React.createClass({
   render: function(props) {
@@ -132,7 +132,7 @@ class Maintable extends React.Component {
           </tr>
         </thead>
         <tbody id="js-tbody">
-        	{rawArray}
+      		 {this.props.children}
         </tbody>
       </table>
 		);
@@ -150,12 +150,11 @@ class Columnleft extends React.Component {
 	}
 }
 
-
 class Addbutton extends React.Component {
 	constructor(props) {
     super(props);
     this.state = {
-    	rowsNumber: rawArray.length
+    	tbodyChildren: 0
     };
     this.makeRequest = this.makeRequest.bind(this); //This binding is necessary to make 'this' work in the callback
   }
@@ -163,9 +162,13 @@ class Addbutton extends React.Component {
   makeRequest(e) {
 		e.preventDefault();
 
+		this.setState({
+			tbodyChildren: this.state.numChildren + 1
+		});
+
 		var addField = document.getElementById('js-addField'),
 		    city = addField.value,
-		    tbody = document.getElementById('js-tbody'),
+		    //tbody = document.getElementById('js-tbody'),
 		    messageContainer = document.getElementById('js-messageContainer');
 
 			var url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
@@ -179,13 +182,9 @@ class Addbutton extends React.Component {
 			cityReq.onreadystatechange = (e) => {
 			  if (cityReq.readyState !== 4) return;
 			  if (cityReq.status === 200) {
-			  	this.setState((prevState, props) => ({
-					  rowsNumber: prevState.rowsNumber + props.increment
-					}));
-					console.log(rawArray.length);
-
 			    var currentWeather = JSON.parse(cityReq.responseText);
-			    
+			    console.log(cityReq.responseText);
+			    console.log(currentWeather);
 			    var cityName = currentWeather.name, 
 			    		coord = currentWeather.coord,
 			    		cityCoord = 'Lon: '+ coord.lon + ', Lat: '+coord.lat,
@@ -200,13 +199,13 @@ class Addbutton extends React.Component {
 	    				cityHumidity = 'Humidity: ' + main.humidity + '%',
     					cityWind = 'Wind: ' + wind.speed +' m/s';
 
-					
-					for (var i = 0; i < this.state.rowsNumber; i++) {
-			    	rawArray.push(<Weather city={cityName} coord={cityCoord} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>);
+					for (var i = 0; i < this.state.tbodyChildren; i++) {
+						//ReactDOM.render(<Weather city={cityName} coord={cityCoord} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>, tbody);
+						children.push(<Weather num={i} city={cityName} coord={cityCoord} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>);
 					}
 
-					ReactDOM.render(rawArray, tbody);
-					//ReactDOM.render(<Weather city={cityName} coord={cityCoord} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>, tbody);
+					console.log(children);
+
 					ReactDOM.unmountComponentAtNode(messageContainer);
 					ReactDOM.render(<Message/>, messageContainer);
 			  } else {
@@ -315,6 +314,7 @@ class Header extends React.Component {
 }
 
 var page = 'b-page';
+
 class App extends React.Component {
 	render() {
 		return  (
