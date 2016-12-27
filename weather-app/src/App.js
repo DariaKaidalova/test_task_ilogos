@@ -179,9 +179,13 @@ class Addbutton extends React.Component {
 			cityReq.onreadystatechange = (e) => {
 			  if (cityReq.readyState !== 4) return;
 			  if (cityReq.status === 200) {
-			  	this.setState((prevState, props) => ({
-					  rowsNumber: prevState.rowsNumber + props.increment
-					}));
+			  	
+					this.setState(function(prevState, props) {
+						return {
+							rowsNumber: prevState.rowsNumber + props.increment
+						};
+					});
+
 					console.log(rawArray.length);
 
 			    var currentWeather = JSON.parse(cityReq.responseText);
@@ -204,8 +208,8 @@ class Addbutton extends React.Component {
 					for (var i = 0; i < this.state.rowsNumber; i++) {
 			    	rawArray.push(<Weather city={cityName} coord={cityCoord} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>);
 					}
-
-					ReactDOM.render(rawArray, tbody);
+					console.log(rawArray);
+					//ReactDOM.render(rawArray, tbody);
 					//ReactDOM.render(<Weather city={cityName} coord={cityCoord} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>, tbody);
 					ReactDOM.unmountComponentAtNode(messageContainer);
 					ReactDOM.render(<Message/>, messageContainer);
