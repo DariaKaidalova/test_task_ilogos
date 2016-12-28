@@ -69,7 +69,7 @@ var Weather = React.createClass({
   				<div className={tableWeatherItem}>Maximum temperature: {this.props.maxTemp} °C</div>
   				<div className={tableWeatherItem}>Pressure: {this.props.pressure} hpa</div>
   				<div className={tableWeatherItem}>Humidity: {this.props.humidity} %</div>
-  				<div className={tableWeatherItem}>Wind {this.props.wind} m/s</div>
+  				<div className={tableWeatherItem}>Wind: {this.props.wind} m/s</div>
   			</td>
   			<td className={tableRemoval}><Removebutton/></td>
 			</tr>
