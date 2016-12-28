@@ -14,21 +14,23 @@ var clearfix = 'g-clearfix',
 		field = 'b-field',
 		title = 'b-title';
 
-class Message extends React.Component {
-	render() {
-		return  (
-			<div className={message}>The weather added to the table.</div>
-		);
-	}
-}
 
-class Messageerror extends React.Component {
-	render() {
-		return  (
-			<div className={error} id="js-addFieldError">Please enter the city.</div>
+var Message = React.createClass({
+  render: function(props) {
+    return (
+			<div className={message}>{this.props.content}</div>
 		);
 	}
-}
+});
+
+
+var Messageerror = React.createClass({
+  render: function(props) {
+    return (
+			<div className={error} id="js-addFieldError">{this.props.content}</div>
+		);
+	}
+});
 
 class Removebutton extends React.Component {
 	constructor(props) {
@@ -46,26 +48,28 @@ class Removebutton extends React.Component {
 		);
 	}
 }
+
 var table = 'b-table',
     tableWeather = 'b-table__weather',
 		tableWeatherItem = 'b-table__weatherItem',
 		tableCity = 'b-table__city',
 		tableCoord = 'b-table__coord ',
 		tableRemoval = 'b-table__removal';
+
 var Weather = React.createClass({
   render: function(props) {
     return (
   		<tr name={this.props.city}>
-  			<td className={tableCity}>{this.props.city}</td>
-  			<td className={tableCoord}>{this.props.coord}</td>
+  			<td className={tableCity}>{this.props.city}, {this.props.country}</td>
+  			<td className={tableCoord}>Lat: {this.props.lat}, Lon: {this.props.lon}</td>
   			<td className={tableWeather}>
-  				<div className={tableWeatherItem}>{this.props.descr}</div>
-  				<div className={tableWeatherItem}>{this.props.temp}</div>
-  				<div className={tableWeatherItem}>{this.props.minTemp}</div>
-  				<div className={tableWeatherItem}>{this.props.maxTemp}</div>
-  				<div className={tableWeatherItem}>{this.props.pressure}</div>
-  				<div className={tableWeatherItem}>{this.props.humidity}</div>
-  				<div className={tableWeatherItem}>{this.props.wind}</div>
+  				<div className={tableWeatherItem}>Weather: {this.props.descr}</div>
+  				<div className={tableWeatherItem}>Temperature: {this.props.temp} °C</div>
+  				<div className={tableWeatherItem}>Minimum temperature: {this.props.minTemp} °C</div>
+  				<div className={tableWeatherItem}>Maximum temperature: {this.props.maxTemp} °C</div>
+  				<div className={tableWeatherItem}>Pressure: {this.props.pressure} hpa</div>
+  				<div className={tableWeatherItem}>Humidity: {this.props.humidity} %</div>
+  				<div className={tableWeatherItem}>Wind {this.props.wind} m/s</div>
   			</td>
   			<td className={tableRemoval}><Removebutton/></td>
 			</tr>
@@ -93,6 +97,7 @@ class Maintable extends React.Component {
 }
 
 var columnLeft = 'b-content__columnLeft';
+
 class Columnleft extends React.Component {
 	render() {
 		return  (
@@ -132,26 +137,29 @@ class Addbutton extends React.Component {
 
 			    var currentWeather = JSON.parse(cityReq.responseText);
 
-			    var cityName = currentWeather.name, 
+			    var cityName = currentWeather.name,
+			    		sys = currentWeather.sys,
+		    			cityCountry = sys.country, 
 			    		coord = currentWeather.coord,
-			    		cityCoord = 'Lon: '+ coord.lon + ', Lat: '+coord.lat,
+			    		cityLon = coord.lon,
+			    		cityLat = coord.lat,
 	    				weather = currentWeather.weather, weatherArray =  weather[0],
 	    				main = currentWeather.main,
 	    				wind = currentWeather.wind,
-	    				cityDescr = 'Weather: ' + weatherArray.description,
-	    				cityTemp = 'Temperature: ' + main.temp + ' °C',
-	    				cityMinTemp = 'Minimum temperature: ' + main.temp_min+ ' °C',
-	    				cityMaxTemp = 'Maximum temperature: ' + main.temp_max + ' °C',
-	    				cityPressure = 'Pressure: ' + main.pressure +' hpa',
-	    				cityHumidity = 'Humidity: ' + main.humidity + '%',
-    					cityWind = 'Wind: ' + wind.speed +' m/s';
+	    				cityDescr = weatherArray.description,
+	    				cityTemp = main.temp,
+	    				cityMinTemp = main.temp_min,
+	    				cityMaxTemp = main.temp_max,
+	    				cityPressure = main.pressure,
+	    				cityHumidity = main.humidity,
+    					cityWind = wind.speed;
 
-					ReactDOM.render(<Weather city={cityName} coord={cityCoord} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>, tbody);
+					ReactDOM.render(<Weather city={cityName} country={cityCountry} lat={cityLat} lon={cityLon} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>, tbody);
 					ReactDOM.unmountComponentAtNode(messageContainer);
-					ReactDOM.render(<Message/>, messageContainer);
+					ReactDOM.render(<Message content={'The weather added to the table.'}/>, messageContainer);
 			  } else {
 			  	ReactDOM.unmountComponentAtNode(messageContainer);
-			    ReactDOM.render(<Messageerror/>, messageContainer);
+			    ReactDOM.render(<Messageerror content={'Please enter the city.'}/>, messageContainer);
 			  }
 			};
   }
@@ -181,11 +189,52 @@ class Controlswrap extends React.Component {
 		);
 	}
 }
+
 var currentWeatherWrap = 'l-currentWeather',
 		currentWeather = 'b-currentWeather',
 		currentWeatherItem ='b-currentWeather__item',
 		currentWeatherTitle = 'b-currentWeather__title',
-		currentWeatherVal = 'b-currentWeather__val';
+		currentWeatherVal = 'b-currentWeather__val',
+		marginRight = '-margin_right'
+
+var Currentweathercontent = React.createClass({
+  render: function(props) {
+    return (
+	  	<div>
+	    	<h2 className={title}>Weather in {this.props.place}, {this.props.country}</h2>
+				<ul className={currentWeather}>
+					<li className={currentWeatherItem}>
+						<div>
+							<span className={currentWeatherTitle}>Lat:</span><span className={currentWeatherVal + ' ' + marginRight}>{this.props.currentLat},</span>
+							<span className={currentWeatherTitle}>Lon:</span><span className={currentWeatherVal}>{this.props.currentLon}</span>
+						</div>
+					</li>
+					<li className={currentWeatherItem}>
+						<span className={currentWeatherTitle}>Weather:</span><span className={currentWeatherVal}>{this.props.weather}</span>
+					</li>
+					<li className={currentWeatherItem}>
+						<span className={currentWeatherTitle}>Temperature:</span><span className={currentWeatherVal}>{this.props.temp} °C</span>
+					</li>
+					<li className={currentWeatherItem} >
+						<span className={currentWeatherTitle}>Minimum temperature:</span><span className={currentWeatherVal}>{this.props.minTemp} °C</span>
+					</li>
+					<li className={currentWeatherItem}>
+						<span className={currentWeatherTitle}>Maximum temperature:</span><span className={currentWeatherVal}>{this.props.maxTemp} °C</span>
+					</li>
+					<li className={currentWeatherItem} >
+						<span className={currentWeatherTitle}>Pressure:</span><span className={currentWeatherVal}>{this.props.pressure} hpa</span>
+					</li>
+					<li className={currentWeatherItem}>
+						<span className={currentWeatherTitle}>Humidity:</span><span className={currentWeatherVal}>{this.props.humidity} %</span>
+					</li>
+					<li className={currentWeatherItem} >
+						<span className={currentWeatherTitle}>Wind:</span><span className={currentWeatherVal}>{this.props.wind} m/s</span>
+					</li>
+				</ul>
+			</div>
+  	)
+  }
+});
 
 class Currentweather extends React.Component {
 	constructor(props) {
@@ -195,19 +244,16 @@ class Currentweather extends React.Component {
   }
 
   getCurrentWeather() {
-  	var currentLat, currentLon, url, currentPlaceReq, currentPlaceWeather, currentCoord;
+  	var currentLat, currentLon, url, currentPlaceReq, currentPlaceWeather;
 		if(navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function(position) {
+				navigator.geolocation.getCurrentPosition(function(position) {
 				currentLat = (position.coords.latitude).toFixed(2);
 				currentLon = (position.coords.longitude).toFixed(2);
-				console.log(currentLat+' '+currentLon);
-				console.log('1');
 				getCurrentData();
 			});
-		} else {
-			alert('Geolocation API не поддерживается в вашем браузере');
-		}
-
+		} 
+		else alert('Geolocation API не поддерживается в вашем браузере');
+		
 		function getCurrentData() {
 			url = 'http://api.openweathermap.org/data/2.5/weather?lat='+currentLat+'&lon='+currentLon+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
 		
@@ -218,50 +264,46 @@ class Currentweather extends React.Component {
 			currentPlaceReq.onreadystatechange = (e) => {
 			  if (currentPlaceReq.readyState !== 4) return;
 			  if (currentPlaceReq.status === 200) {
-
 			    currentPlaceWeather = JSON.parse(currentPlaceReq.responseText);
 		    	console.log(currentPlaceWeather);
-			    
-			  } else {
-			  	console.log('error');
+
+		    	var currentWeatherWrap = document.getElementById('js-currentWeather'),
+		    			placeName = currentPlaceWeather.name,
+		    			sys = currentPlaceWeather.sys,
+		    			placeCountry = sys.country,
+		    			weather = currentPlaceWeather.weather, weatherArray =  weather[0],
+	    				main = currentPlaceWeather.main,
+	    				wind = currentPlaceWeather.wind,
+	    				placeDescr = weatherArray.description,
+	    				placeTemp =  main.temp,
+	    				placeMinTemp = main.temp_min,
+	    				placeMaxTemp = main.temp_max,
+	    				placePressure = main.pressure,
+	    				placeHumidity = main.humidity,
+    					placeWind = wind.speed;
+
+		    	ReactDOM.render(<Currentweathercontent place={placeName} country={placeCountry} currentLat={currentLat} currentLon={currentLon} weather={placeDescr } temp={placeTemp} minTemp={placeMinTemp} maxTemp={placeMaxTemp} pressure={placePressure} humidity={placeHumidity} wind={placeWind}/>, currentWeatherWrap);
+				}
+			  else { 
+			  	ReactDOM.render(<Messageerror content={'Please check HTML5 Geolocation or download a modern browser!'}/>, currentWeatherWrap);
 			  }
 			};
 		}
 	}
 
 	render(){
-		this.getCurrentWeather();
 		return(
-			<div className={currentWeatherWrap}>
-				<h2 className={title}>Weather in Kharkiv, UA</h2>
-				<ul className={currentWeather}>
-					<li className={currentWeatherItem} id='js-currentCoord'>
-						<div>
-							<span className={currentWeatherTitle}>Lat: </span>
-							<span className={currentWeatherVal}></span>,
-							<span className={currentWeatherTitle}>Lon: </span>
-							<span className={currentWeatherVal}></span>
-						</div>
-					</li>
-					<li className={currentWeatherItem} id="js-currentWeather">
-						<div>
-							<span className={currentWeatherTitle}></span>
-							<span className={currentWeatherVal}></span>
-						</div>
-					</li>
-					<li className={currentWeatherItem} id="js-currentTemp"></li>
-					<li className={currentWeatherItem} id="js-currentMinTemp"></li>
-					<li className={currentWeatherItem} id="js-currentMaxTemp"></li>
-					<li className={currentWeatherItem} id="js-currentPressure"></li>
-					<li className={currentWeatherItem} id="js-currentHumidity"></li>
-					<li className={currentWeatherItem} id="js-currentWind"></li>
-				</ul>
-			</div>
+			<div className={currentWeatherWrap} id="js-currentWeather"></div>
 		);
+	}
+
+	componentDidMount() {
+		this.getCurrentWeather();
 	}
 }
 
 var sidebar = 'b-sidebar';
+
 class Sidebar extends React.Component {
 	render() {
 		return  (
@@ -276,6 +318,7 @@ class Sidebar extends React.Component {
 
 var content = 'b-content',
 		contentInner = 'b-content__inner';
+
 class Main extends React.Component {
 	render() {
 		return  (
@@ -292,6 +335,7 @@ class Main extends React.Component {
 var header = 'b-header',
 		headerInner = 'b-header__inner',
 		headerTitle = 'b-header__title';
+
 class Header extends React.Component {
 	render() {
 		return  (
@@ -305,6 +349,7 @@ class Header extends React.Component {
 }
 
 var page = 'b-page';
+
 class App extends React.Component {
 	render() {
 		return  (

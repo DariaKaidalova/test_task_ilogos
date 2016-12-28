@@ -134,8 +134,17 @@
 .b-currentWeather__item {
   margin: 0 0 7px;
 }
-.b-currentWeather__title {}
-.b-currentWeather__val {}
+.b-currentWeather__title {
+	display: inline-block;
+	margin: 0 7px 0 0;
+	font-weight: 700;
+}
+.b-currentWeather__val {
+	display: inline-block;
+}
+.b-currentWeather__val.-margin_right {
+	margin-right: 7px;
+}
 
 .b-title {
 	margin: 0 0 20px;
