@@ -3,49 +3,6 @@ import ReactDOM from 'react-dom';
 import './normalize.css';
 import './main.css';
 
-/*var watchId;
-function startWatch() {
-	if(navigator.geolocation) {
-		var optn = {
-			enableHighAccuracy: true,
-			timeout: Infinity,
-			maximumAge: 0
-		};
-		watchId = navigator.geolocation.getCurrentPosition(showPosition, showError, optn);
-		console.log(navigator.geolocation.getCurrentPosition(showPosition, showError, optn));
-	} else {
-		alert('Geolocation is not supported in your browser');
-	}
-
-	function showPosition(position) {
-		document.write('Latitude: '+position.coords.latitude+'Longitude: '+position.coords.longitude);
-	}
-
-	function showError(error) {
-		switch(error.code) {
-			case error.PERMISSION_DENIED:
-				alert("User denied the request for Geolocation.");
-				break;
-			case error.POSITION_UNAVAILABLE:
-				alert("Location information is unavailable.");
-				break;
-			case error.TIMEOUT:
-				alert("The request to get user location timed out.");
-				break;
-			case error.UNKNOWN_ERROR:
-				alert("An unknown error occurred.");
-				break;
-		}
-	}
-}
-
-function stopWatch() {
- if (watchId) {
-		navigator.geolocation.clearWatch(watchId);
-		watchId = null;
-	}
-}*/
-
 var clearfix = 'g-clearfix',
 		message =  'b-message',
 		error ='b-message -type_error', 
@@ -75,8 +32,8 @@ class Messageerror extends React.Component {
 
 class Removebutton extends React.Component {
 	constructor(props) {
-    super(props)
-    this.state = {};;
+    super(props);
+    this.state = {};
     this.removeCity = this.removeCity.bind(this); //This binding is necessary to make 'this' work in the callback
   }
 
@@ -85,20 +42,16 @@ class Removebutton extends React.Component {
   }
 	render() {
 		return  (
-			<a className={button} href="" onClick={this.makeRequest}>Remove</a> 
+			<a className={button} href="" onClick={this.getWeather}>Remove</a> 
 		);
 	}
 }
-
 var table = 'b-table',
     tableWeather = 'b-table__weather',
 		tableWeatherItem = 'b-table__weatherItem',
 		tableCity = 'b-table__city',
 		tableCoord = 'b-table__coord ',
 		tableRemoval = 'b-table__removal';
-
-var rawArray = [];
-
 var Weather = React.createClass({
   render: function(props) {
     return (
@@ -132,7 +85,7 @@ class Maintable extends React.Component {
           </tr>
         </thead>
         <tbody id="js-tbody">
-        	{rawArray}
+        
         </tbody>
       </table>
 		);
@@ -150,17 +103,14 @@ class Columnleft extends React.Component {
 	}
 }
 
-
 class Addbutton extends React.Component {
 	constructor(props) {
     super(props);
-    this.state = {
-    	rowsNumber: rawArray.length
-    };
-    this.makeRequest = this.makeRequest.bind(this); //This binding is necessary to make 'this' work in the callback
+    this.state = {};
+    this.getWeather = this.getWeather.bind(this); //This binding is necessary to make 'this' work in the callback
   }
 
-  makeRequest(e) {
+  getWeather(e) {
 		e.preventDefault();
 
 		var addField = document.getElementById('js-addField'),
@@ -179,17 +129,9 @@ class Addbutton extends React.Component {
 			cityReq.onreadystatechange = (e) => {
 			  if (cityReq.readyState !== 4) return;
 			  if (cityReq.status === 200) {
-			  	
-					this.setState(function(prevState, props) {
-						return {
-							rowsNumber: prevState.rowsNumber + props.increment
-						};
-					});
-
-					console.log(rawArray.length);
 
 			    var currentWeather = JSON.parse(cityReq.responseText);
-			    
+
 			    var cityName = currentWeather.name, 
 			    		coord = currentWeather.coord,
 			    		cityCoord = 'Lon: '+ coord.lon + ', Lat: '+coord.lat,
@@ -204,13 +146,7 @@ class Addbutton extends React.Component {
 	    				cityHumidity = 'Humidity: ' + main.humidity + '%',
     					cityWind = 'Wind: ' + wind.speed +' m/s';
 
-					
-					for (var i = 0; i < this.state.rowsNumber; i++) {
-			    	rawArray.push(<Weather city={cityName} coord={cityCoord} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>);
-					}
-					console.log(rawArray);
-					//ReactDOM.render(rawArray, tbody);
-					//ReactDOM.render(<Weather city={cityName} coord={cityCoord} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>, tbody);
+					ReactDOM.render(<Weather city={cityName} coord={cityCoord} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>, tbody);
 					ReactDOM.unmountComponentAtNode(messageContainer);
 					ReactDOM.render(<Message/>, messageContainer);
 			  } else {
@@ -222,7 +158,7 @@ class Addbutton extends React.Component {
 
 	render() {
 		return  (
-			<div className={control +' ' + floatLeft}><a onClick={this.makeRequest} className={button} href="">Add</a></div>
+			<div className={control +' ' + floatLeft}><a onClick={this.getWeather} className={button} href="">Add</a></div>
 		);
 	}
 }
@@ -245,7 +181,6 @@ class Controlswrap extends React.Component {
 		);
 	}
 }
-
 var currentWeatherWrap = 'l-currentWeather',
 		currentWeather = 'b-currentWeather',
 		currentWeatherItem ='b-currentWeather__item',
@@ -253,27 +188,80 @@ var currentWeatherWrap = 'l-currentWeather',
 		currentWeatherVal = 'b-currentWeather__val';
 
 class Currentweather extends React.Component {
+	constructor(props) {
+    super(props);
+    this.state = {};
+    this.getCurrentWeather = this.getCurrentWeather.bind(this); 
+  }
+
+  getCurrentWeather() {
+  	var currentLat, currentLon, url, currentPlaceReq, currentPlaceWeather, currentCoord;
+		if(navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				currentLat = (position.coords.latitude).toFixed(2);
+				currentLon = (position.coords.longitude).toFixed(2);
+				console.log(currentLat+' '+currentLon);
+				console.log('1');
+				getCurrentData();
+			});
+		} else {
+			alert('Geolocation API не поддерживается в вашем браузере');
+		}
+
+		function getCurrentData() {
+			url = 'http://api.openweathermap.org/data/2.5/weather?lat='+currentLat+'&lon='+currentLon+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
+		
+			currentPlaceReq = new XMLHttpRequest();
+			currentPlaceReq.open('GET', url);
+			currentPlaceReq.send();
+
+			currentPlaceReq.onreadystatechange = (e) => {
+			  if (currentPlaceReq.readyState !== 4) return;
+			  if (currentPlaceReq.status === 200) {
+
+			    currentPlaceWeather = JSON.parse(currentPlaceReq.responseText);
+		    	console.log(currentPlaceWeather);
+			    
+			  } else {
+			  	console.log('error');
+			  }
+			};
+		}
+	}
+
 	render(){
+		this.getCurrentWeather();
 		return(
-		<div className={currentWeatherWrap}>
-			<h2 className={title}>Weather in Kharkiv, UA</h2>
-			<ul className={currentWeather}>
-				<li className={currentWeatherItem}>
-					<span className={currentWeatherTitle}>test: </span>
-					<span className={currentWeatherVal}>test</span>
-				</li>
-				<li className={currentWeatherItem}>
-					<span className={currentWeatherTitle}>test: </span>
-					<span className={currentWeatherVal}>test</span>
-				</li>
-			</ul>
-		</div>
+			<div className={currentWeatherWrap}>
+				<h2 className={title}>Weather in Kharkiv, UA</h2>
+				<ul className={currentWeather}>
+					<li className={currentWeatherItem} id='js-currentCoord'>
+						<div>
+							<span className={currentWeatherTitle}>Lat: </span>
+							<span className={currentWeatherVal}></span>,
+							<span className={currentWeatherTitle}>Lon: </span>
+							<span className={currentWeatherVal}></span>
+						</div>
+					</li>
+					<li className={currentWeatherItem} id="js-currentWeather">
+						<div>
+							<span className={currentWeatherTitle}></span>
+							<span className={currentWeatherVal}></span>
+						</div>
+					</li>
+					<li className={currentWeatherItem} id="js-currentTemp"></li>
+					<li className={currentWeatherItem} id="js-currentMinTemp"></li>
+					<li className={currentWeatherItem} id="js-currentMaxTemp"></li>
+					<li className={currentWeatherItem} id="js-currentPressure"></li>
+					<li className={currentWeatherItem} id="js-currentHumidity"></li>
+					<li className={currentWeatherItem} id="js-currentWind"></li>
+				</ul>
+			</div>
 		);
 	}
 }
 
 var sidebar = 'b-sidebar';
-
 class Sidebar extends React.Component {
 	render() {
 		return  (
@@ -288,7 +276,6 @@ class Sidebar extends React.Component {
 
 var content = 'b-content',
 		contentInner = 'b-content__inner';
-
 class Main extends React.Component {
 	render() {
 		return  (
@@ -305,7 +292,6 @@ class Main extends React.Component {
 var header = 'b-header',
 		headerInner = 'b-header__inner',
 		headerTitle = 'b-header__title';
-
 class Header extends React.Component {
 	render() {
 		return  (
