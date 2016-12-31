@@ -30,6 +30,7 @@ class Main extends React.Component {
     for (let i = 0; i < this.state.cities; i++) {
       forecasts.push(<Weather key={i} number={i} city={cityName} country={cityCountry} lat={cityLat} lon={cityLon} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>);
     }
+    
     return (
       <main className={content}>
         <div className={contentInner+ ' ' + clearfix}>
@@ -86,7 +87,6 @@ class Main extends React.Component {
               cityHumidity = main.humidity;
               cityWind = wind.speed;
 
-          //ReactDOM.render(<Weather city={cityName} country={cityCountry} lat={cityLat} lon={cityLon} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>, tbody);
           ReactDOM.unmountComponentAtNode(messageContainer);
           ReactDOM.render(<Message content={'The weather added to the table.'}/>, messageContainer);
         } else {
