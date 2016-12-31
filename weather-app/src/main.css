@@ -98,7 +98,9 @@
 .b-table__weather {
 	width: 250px;
 }
-.b-table__removal {}
+.b-table__removal {
+	width: 105px;
+}
 .b-table__weatherItem {
 	margin: 0 0 3px;
 }
