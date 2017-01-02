@@ -246,11 +246,7 @@ class Header extends React.Component {
 }
 
 /*main*/
-var weatherList = [], weatherSerial, localParsedWeather;
-if(localParsedWeather !== 'underfined') {
-  //if(localParsedWeather.length > 0) weatherList = localParsedWeather;
-  console.log(localParsedWeather);
-}
+var weatherList = [];
 
 class Main extends React.Component {
   constructor(props) {
@@ -267,6 +263,8 @@ class Main extends React.Component {
 
     var item, key = 0;
 
+    console.log('render',weatherList);
+
     for (let i = 0; i < this.state.cities; i++) {
       for(let j = 0; j < weatherList.length; j++) {
 
@@ -274,18 +272,12 @@ class Main extends React.Component {
         key = ++key;
         if(this.state.isUsed === false) {
           forecasts.push(<Weather key={key.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.props.onRemoveForecast}/>);
-        }
+       }
         else {
+          console.log('this.state.isUsed='+this.state.isUsed);
           forecasts.splice(this.state.index, 1);
           forecasts.push(<Weather key={key.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.props.onRemoveForecast}/>);
         }
-
-        console.log('localParsedWeather', localParsedWeather);
-        weatherSerial = JSON.stringify(weatherList);
-        localStorage.setItem('weatherKey', weatherSerial);
-        localParsedWeather = JSON.parse(localStorage.getItem('weatherKey'));
-        console.log('WeatherReturn:');
-        console.log(localParsedWeather);
       }
     }
 
@@ -301,7 +293,7 @@ class Main extends React.Component {
 
   onAddForecast(e) {
     e.preventDefault();
-
+    
     var addFieldVal = document.getElementById('js-addField').value,
         messageContainer = document.getElementById('js-messageContainer'),
         url = 'http://api.openweathermap.org/data/2.5/weather?q='+addFieldVal+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
@@ -347,6 +339,7 @@ class Main extends React.Component {
             }
 
             if(isUsed === false) {
+              console.log('isUsed='+isUsed);
               weatherList.push(
                 { num: this.state.cities,
                   cityName: cityName,
@@ -372,6 +365,7 @@ class Main extends React.Component {
               });
             }
             else {
+              console.log('isUsed='+isUsed);
               weatherList.splice(index, 1);
               weatherList.push(
                 { num: this.state.cities,
