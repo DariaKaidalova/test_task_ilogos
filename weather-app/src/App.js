@@ -43,7 +43,7 @@ class Removebutton extends React.Component {
 var Weather = React.createClass({
   render: function(props) {
     return (
-      <tr name={this.props.city} num={this.props.num}>
+      <tr name={this.props.city} key={this.props.num}>
         <td className={'b-table__city'}>{this.props.city}, {this.props.country}</td>
         <td className={'b-table__coord'}>Lat: {this.props.lat}, Lon: {this.props.lon}</td>
         <td className={'b-table__weather'}>
@@ -191,7 +191,6 @@ class Currentweather extends React.Component {
 			  if (currentPlaceReq.readyState !== 4) return;
 			  if (currentPlaceReq.status === 200) {
 			    currentPlaceWeather = JSON.parse(currentPlaceReq.responseText);
-		    	console.log(currentPlaceWeather);
 
 		    	var currentWeatherWrap = document.getElementById('js-currentWeather'),
 		    			placeName = currentPlaceWeather.name,
@@ -256,12 +255,24 @@ class Header extends React.Component {
 }
 
 /*main*/
-var cityVal, cityName, sys, cityCountry, coord, cityLon, cityLat, weather, weatherArray, main, wind, cityDescr, cityTemp, cityMinTemp, cityMaxTemp, cityPressure, cityHumidity, cityWind;
+
 class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cities: 0
+      cities: 0,
+      addFieldVal: '',
+      cityName: '',
+      cityCountry: '',
+      cityLat: '',
+      cityLon: '',
+      cityDescr: '',
+      cityTemp: '',
+      cityMinTemp: '',
+      cityMaxTemp: '',
+      cityPressure: '',
+      cityHumidity: '',
+      cityWind: ''
     };
   }  
 
@@ -269,9 +280,9 @@ class Main extends React.Component {
     let forecasts = [];
 
     for (let i = 0; i < this.state.cities; i++) {
-      //if(this.state.cities[i].city === cityVal) {
-        forecasts.push(<Weather num={i} city={cityName} country={cityCountry} lat={cityLat} lon={cityLon} descr={cityDescr} temp={cityTemp} minTemp={cityMinTemp} maxTemp={cityMaxTemp} pressure={cityPressure} humidity={cityHumidity} wind={cityWind}/>);
-      //}
+      if(this.state.cityName === this.state.addFieldVal) {
+        forecasts.push(<Weather key={i} city={this.state.cityName} country={this.state.cityCountry} lat={this.state.cityLat} lon={this.state.cityLon} descr={this.state.cityDescr} temp={this.state.cityTemp} minTemp={this.state.cityMinTemp} maxTemp={this.state.cityMaxTemp} pressure={this.state.cityPressure} humidity={this.state.cityHumidity} wind={this.state.cityWind}/>);
+      }
     }
     
     return (
@@ -285,16 +296,12 @@ class Main extends React.Component {
   }
 
   onAddForecast(e) {
-    this.setState((prevState, props) => {
-      return {cities: prevState.cities + 1}
-    });
+    
+    console.log(this.state.cities);
 
-    var addField = document.getElementById('js-addField'),
-        messageContainer = document.getElementById('js-messageContainer');
-
-    cityVal = addField.value;
-
-    var url = 'http://api.openweathermap.org/data/2.5/weather?q='+cityVal+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
+    var messageContainer = document.getElementById('js-messageContainer'),
+        addFieldVal = document.getElementById('js-addField').value,
+        url = 'http://api.openweathermap.org/data/2.5/weather?q='+addFieldVal+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
   
     ReactDOM.unmountComponentAtNode(messageContainer);
 
@@ -310,23 +317,41 @@ class Main extends React.Component {
 
         console.log('city', currentWeather);
 
-        cityName = currentWeather.name;
-        sys = currentWeather.sys;
-        cityCountry = sys.country; 
-        coord = currentWeather.coord;
-        cityLon = coord.lon;
-        cityLat = coord.lat;
-        weather = currentWeather.weather;
-        weatherArray =  weather[0];
-        main = currentWeather.main;
-        wind = currentWeather.wind;
-        cityDescr = weatherArray.description;
-        cityTemp = main.temp;
-        cityMinTemp = main.temp_min;
-        cityMaxTemp = main.temp_max;
-        cityPressure = main.pressure;
-        cityHumidity = main.humidity;
-        cityWind = wind.speed;
+        var cityName = currentWeather.name,
+            sys = currentWeather.sys,
+            cityCountry = sys.country,
+            coord = currentWeather.coord,
+            cityLon = coord.lon,
+            cityLat = coord.lat,
+            weather = currentWeather.weather,
+            weatherArray =  weather[0],
+            main = currentWeather.main,
+            wind = currentWeather.wind,
+            cityDescr = weatherArray.description,
+            cityTemp = main.temp,
+            cityMinTemp = main.temp_min,
+            cityMaxTemp = main.temp_max,
+            cityPressure = main.pressure,
+            cityHumidity = main.humidity,
+            cityWind = wind.speed;
+
+            this.setState(function(prevState, props) {
+              return {
+                cities: prevState.cities + 1,
+                addFieldVal: addFieldVal,
+                cityName: cityName,
+                cityCountry: cityCountry,
+                cityLat: cityLat,
+                cityLon: cityLon,
+                cityDescr: cityDescr,
+                cityTemp: cityTemp,
+                cityMinTemp: cityMinTemp,
+                cityMaxTemp: cityMaxTemp,
+                cityPressure: cityPressure,
+                cityHumidity: cityHumidity,
+                cityWind: cityWind
+              }
+            });
 
         ReactDOM.unmountComponentAtNode(messageContainer);
         ReactDOM.render(<Message content={'The weather added to the table.'}/>, messageContainer);
