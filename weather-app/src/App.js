@@ -263,21 +263,24 @@ class Main extends React.Component {
 
     var item, key = 0;
 
+    console.log('render',weatherList);
+
     for (let i = 0; i < this.state.cities; i++) {
       for(let j = 0; j < weatherList.length; j++) {
 
         item = weatherList[j];
         key = ++key;
-        //if(this.state.isUsed === false) {
+        if(this.state.isUsed === false) {
           forecasts.push(<Weather key={key.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.props.onRemoveForecast}/>);
-       // }
-        // else {
-        //   forecasts.splice(this.state.index, 1);
-        //   forecasts.push(<Weather key={key.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind}/>);
-        // }
+       }
+        else {
+          console.log('this.state.isUsed='+this.state.isUsed);
+          forecasts.splice(this.state.index, 1);
+          forecasts.push(<Weather key={key.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.props.onRemoveForecast}/>);
+        }
       }
     }
-    
+
     return (
       <main className={'b-content'}>
         <div className={'b-content__inner g-clearfix'}>
@@ -324,7 +327,7 @@ class Main extends React.Component {
             cityHumidity = main.humidity,
             cityWind = wind.speed;
 
-            var item, isUsed = false, index;
+            var item, isUsed = false, index = -1;
 
             for(let j = 0; j < weatherList.length; j++) {
               item = weatherList[j];
@@ -352,6 +355,14 @@ class Main extends React.Component {
                   cityWind: cityWind
                 }
               );
+
+              this.setState(function(prevState, props) {
+                return {
+                  cities: prevState.cities + 1,
+                  isUsed: !prevState.isUsed,
+                  index: -1
+                }
+              });
             }
             else {
               console.log('isUsed='+isUsed);
@@ -371,19 +382,18 @@ class Main extends React.Component {
                   cityWind: cityWind
                 }
               );
+
+              this.setState(function(prevState, props) {
+                return {
+                  cities: prevState.cities,
+                  isUsed: !prevState.isUsed,
+                  index: index
+                }
+              });
             }
 
-            console.log(weatherList);
-
-            this.setState(function(prevState, props) {
-              return {
-                cities: prevState.cities + 1,
-                isUsed: isUsed,
-                index: index
-              }
-            });
-
             isUsed = false;
+            index = -1;
 
         ReactDOM.unmountComponentAtNode(messageContainer);
         ReactDOM.render(<Message content={'The weather added to the table.'}/>, messageContainer);
