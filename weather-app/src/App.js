@@ -21,29 +21,11 @@ var Messageerror = React.createClass({
 });
 
 
-/*button 'Remove'*/
-class Removebutton extends React.Component {
-	constructor(props) {
-    super(props);
-    this.removeCity = this.removeCity.bind(this); //This binding is necessary to make 'this' work in the callback
-  }
-
-  removeCity(e) {
-  	e.preventDefault();
-  }
-
-	render() {
-		return  (
-			<a className={'b-button'} href="" onClick={this.getWeather}>Remove</a> 
-		);
-	}
-}
-
 /*table raw with city/place weather*/
 var Weather = React.createClass({
   render: function(props) {
     return (
-      <tr name={this.props.city} key={this.props.num}>
+      <tr name={this.props.city}>
         <td className={'b-table__city'}>{this.props.city}, {this.props.country}</td>
         <td className={'b-table__coord'}>Lat: {this.props.lat}, Lon: {this.props.lon}</td>
         <td className={'b-table__weather'}>
@@ -55,7 +37,7 @@ var Weather = React.createClass({
           <div className={'b-table__weatherItem'}>Humidity: {this.props.humidity} %</div>
           <div className={'b-table__weatherItem'}>Wind: {this.props.wind} m/s</div>
         </td>
-        <td className={'b-table__removal'}><Removebutton/></td>
+        <td className={'b-table__removal'}><Removebutton onRemoveForecast={this.props.onRemoveForecast}/></td>
       </tr>
     )
   }
@@ -87,7 +69,7 @@ class Columnleft extends React.Component {
 	render() {
 		return  (
 			<div className={'b-content__columnLeft'}>
-        <Maintable forecasts={this.props.forecasts} />
+        <Maintable forecasts={this.props.forecasts} onRemoveForecast={this.props.onRemoveForecast} />
 			</div>
 		);
 	}
@@ -98,6 +80,15 @@ class Addbutton extends React.Component {
   render() {
     return  (
       <div className={'b-control -float_left'}><a onClick={this.props.onAddForecast} className={'b-button'} href="">Add</a></div>
+    );
+  }
+}
+
+/*button 'Remove'*/
+class Removebutton extends React.Component {
+  render() {
+    return  (
+      <a className={'b-button'} onClick={this.props.onRemoveForecast} href="" >Remove</a> 
     );
   }
 }
@@ -255,33 +246,35 @@ class Header extends React.Component {
 }
 
 /*main*/
+var weatherList = [];
 
 class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       cities: 0,
-      addFieldVal: '',
-      cityName: '',
-      cityCountry: '',
-      cityLat: '',
-      cityLon: '',
-      cityDescr: '',
-      cityTemp: '',
-      cityMinTemp: '',
-      cityMaxTemp: '',
-      cityPressure: '',
-      cityHumidity: '',
-      cityWind: ''
+      isUsed: false,
+      index: -1
     };
   }  
 
   render() {
     let forecasts = [];
 
+    var item, key = 0;
+
     for (let i = 0; i < this.state.cities; i++) {
-      if(this.state.cityName === this.state.addFieldVal) {
-        forecasts.push(<Weather key={i} city={this.state.cityName} country={this.state.cityCountry} lat={this.state.cityLat} lon={this.state.cityLon} descr={this.state.cityDescr} temp={this.state.cityTemp} minTemp={this.state.cityMinTemp} maxTemp={this.state.cityMaxTemp} pressure={this.state.cityPressure} humidity={this.state.cityHumidity} wind={this.state.cityWind}/>);
+      for(let j = 0; j < weatherList.length; j++) {
+
+        item = weatherList[j];
+        key = ++key;
+        //if(this.state.isUsed === false) {
+          forecasts.push(<Weather key={key.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.props.onRemoveForecast}/>);
+       // }
+        // else {
+        //   forecasts.splice(this.state.index, 1);
+        //   forecasts.push(<Weather key={key.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind}/>);
+        // }
       }
     }
     
@@ -289,18 +282,17 @@ class Main extends React.Component {
       <main className={'b-content'}>
         <div className={'b-content__inner g-clearfix'}>
           <Sidebar onAddForecast={this.onAddForecast.bind(this)}/>
-          <Columnleft forecasts={forecasts}/>
+          <Columnleft forecasts={forecasts} onRemoveForecast={this.onRemoveForecast.bind(this)}/>
         </div>
       </main>
     )
   }
 
   onAddForecast(e) {
+    e.preventDefault();
     
-    console.log(this.state.cities);
-
-    var messageContainer = document.getElementById('js-messageContainer'),
-        addFieldVal = document.getElementById('js-addField').value,
+    var addFieldVal = document.getElementById('js-addField').value,
+        messageContainer = document.getElementById('js-messageContainer'),
         url = 'http://api.openweathermap.org/data/2.5/weather?q='+addFieldVal+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
   
     ReactDOM.unmountComponentAtNode(messageContainer);
@@ -313,11 +305,8 @@ class Main extends React.Component {
       if (cityReq.readyState !== 4) return;
       if (cityReq.status === 200) {
 
-        var currentWeather = JSON.parse(cityReq.responseText);
-
-        console.log('city', currentWeather);
-
-        var cityName = currentWeather.name,
+        var currentWeather = JSON.parse(cityReq.responseText),
+            cityName = currentWeather.name,
             sys = currentWeather.sys,
             cityCountry = sys.country,
             coord = currentWeather.coord,
@@ -335,23 +324,66 @@ class Main extends React.Component {
             cityHumidity = main.humidity,
             cityWind = wind.speed;
 
+            var item, isUsed = false, index;
+
+            for(let j = 0; j < weatherList.length; j++) {
+              item = weatherList[j];
+              if(item.cityName === cityName) {
+                isUsed = true;
+                index = j;
+                break;
+              }
+            }
+
+            if(isUsed === false) {
+              console.log('isUsed='+isUsed);
+              weatherList.push(
+                { num: this.state.cities,
+                  cityName: cityName,
+                  cityCountry: cityCountry,
+                  cityLat: cityLat,
+                  cityLon: cityLon,
+                  cityDescr: cityDescr,
+                  cityTemp: cityTemp,
+                  cityMinTemp: cityMinTemp,
+                  cityMaxTemp: cityMaxTemp,
+                  cityPressure: cityPressure,
+                  cityHumidity: cityHumidity,
+                  cityWind: cityWind
+                }
+              );
+            }
+            else {
+              console.log('isUsed='+isUsed);
+              weatherList.splice(index, 1);
+              weatherList.push(
+                { num: this.state.cities,
+                  cityName: cityName,
+                  cityCountry: cityCountry,
+                  cityLat: cityLat,
+                  cityLon: cityLon,
+                  cityDescr: cityDescr,
+                  cityTemp: cityTemp,
+                  cityMinTemp: cityMinTemp,
+                  cityMaxTemp: cityMaxTemp,
+                  cityPressure: cityPressure,
+                  cityHumidity: cityHumidity,
+                  cityWind: cityWind
+                }
+              );
+            }
+
+            console.log(weatherList);
+
             this.setState(function(prevState, props) {
               return {
                 cities: prevState.cities + 1,
-                addFieldVal: addFieldVal,
-                cityName: cityName,
-                cityCountry: cityCountry,
-                cityLat: cityLat,
-                cityLon: cityLon,
-                cityDescr: cityDescr,
-                cityTemp: cityTemp,
-                cityMinTemp: cityMinTemp,
-                cityMaxTemp: cityMaxTemp,
-                cityPressure: cityPressure,
-                cityHumidity: cityHumidity,
-                cityWind: cityWind
+                isUsed: isUsed,
+                index: index
               }
             });
+
+            isUsed = false;
 
         ReactDOM.unmountComponentAtNode(messageContainer);
         ReactDOM.render(<Message content={'The weather added to the table.'}/>, messageContainer);
@@ -359,9 +391,12 @@ class Main extends React.Component {
         ReactDOM.unmountComponentAtNode(messageContainer);
         ReactDOM.render(<Messageerror content={'Please enter the city.'}/>, messageContainer);
       }
-    };
+    }; 
+  }
 
+  onRemoveForecast(e) {
     e.preventDefault();
+    console.log('test');
   }
 }
 
