@@ -218,10 +218,19 @@ class Header extends React.Component {
 }
 
 /*main*/
+/*var weatherSerial, localParsedWeather;
+if(localParsedWeather !== 'underfined') {
+//if(localParsedWeather.length > 0) weatherList = localParsedWeather;
+console.log(localParsedWeather);
+}*/
+
 var weatherList = [], serialWeatherList, localWeatherList;
+
 localWeatherList = JSON.parse(localStorage.getItem('weatherKey'));
+
 if(localWeatherList !== null) weatherList = localWeatherList;
 
+console.log(localWeatherList);
 class Main extends React.Component {
   constructor(props) {
     super(props);
@@ -318,6 +327,7 @@ class Main extends React.Component {
 
         serialWeatherList = JSON.stringify(weatherList);
         localStorage.setItem('weatherKey', serialWeatherList);
+        //localWeatherList = JSON.parse(localStorage.getItem('weatherKey'));
         
         this.setState(function(prevState, props) {
           return {
