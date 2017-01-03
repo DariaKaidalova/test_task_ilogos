@@ -268,14 +268,7 @@ class Main extends React.Component {
 
     for (let i = 0; i < weatherList.length; i++) {
       var item = weatherList[i];
-      console.log('i='+i);
-      console.log(item);
-      //if(this.state.isUsed === false) {
-        forecasts.push(<Weather key={i.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.props.onRemoveForecast}/>); 
-      //}
-      //else {
-        console.log('isUsed = ' + this.state.isUsed);
-      //}
+      forecasts.push(<Weather key={i.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.props.onRemoveForecast}/>); 
     }
 
     return (
@@ -304,7 +297,7 @@ class Main extends React.Component {
     cityReq.onreadystatechange = (e) => {
       if (cityReq.readyState !== 4) return;
       if (cityReq.status === 200) {
-        
+
         var currentWeather = JSON.parse(cityReq.responseText),
             cityName = currentWeather.name,
             sys = currentWeather.sys,
