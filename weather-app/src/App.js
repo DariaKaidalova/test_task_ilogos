@@ -25,7 +25,7 @@ var Messageerror = React.createClass({
 var Weather = React.createClass({
   render: function(props) {
     return (
-      <tr name={this.props.city}>
+      <tr id={this.props.city}>
         <td className={'b-table__city'}>{this.props.city}, {this.props.country}</td>
         <td className={'b-table__coord'}>Lat: {this.props.lat}, Lon: {this.props.lon}</td>
         <td className={'b-table__weather'}>
@@ -296,6 +296,7 @@ class Main extends React.Component {
           if(item.cityName === cityName) {
             index = i;
             isUsed = true;
+            break;
           }
         }
 
@@ -327,7 +328,8 @@ class Main extends React.Component {
         });
 
         ReactDOM.unmountComponentAtNode(messageContainer);
-        ReactDOM.render(<Message content={'The weather added to the table.'}/>, messageContainer);
+        if(isUsed === false) ReactDOM.render(<Message content={'The weather added.'}/>, messageContainer);
+        else ReactDOM.render(<Message content={'The weather updated.'}/>, messageContainer);
 
       } else {
 
@@ -340,7 +342,6 @@ class Main extends React.Component {
 
   onRemoveForecast(e) {
     e.preventDefault();
-    console.log('test');
   }
 }
 
