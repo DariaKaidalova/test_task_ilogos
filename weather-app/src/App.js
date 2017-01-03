@@ -37,7 +37,7 @@ var Weather = React.createClass({
           <div className={'b-table__weatherItem'}>Humidity: {this.props.humidity} %</div>
           <div className={'b-table__weatherItem'}>Wind: {this.props.wind} m/s</div>
         </td>
-        <td className={'b-table__removal'}><Removebutton onRemoveForecast={this.props.onRemoveForecast}/></td>
+        <td className={'b-table__removal'}><a className={'b-button'} href="" onClick={this.props.onRemoveForecast}>Remove</a></td>
       </tr>
     )
   }
@@ -69,35 +69,8 @@ class Columnleft extends React.Component {
 	render() {
 		return  (
 			<div className={'b-content__columnLeft'}>
-        <Maintable forecasts={this.props.forecasts} onRemoveForecast={this.props.onRemoveForecast} />
+        <Maintable forecasts={this.props.forecasts}/>
 			</div>
-		);
-	}
-}
-
-/*button 'Add'*/
-class Addbutton extends React.Component {
-  render() {
-    return  (
-      <div className={'b-control -float_left'}><a onClick={this.props.onAddForecast} className={'b-button'} href="">Add</a></div>
-    );
-  }
-}
-
-/*button 'Remove'*/
-class Removebutton extends React.Component {
-  render() {
-    return  (
-      <a className={'b-button'} onClick={this.props.onRemoveForecast} href="" >Remove</a> 
-    );
-  }
-}
-
-/*field for adding weather*/
-class Addfield extends React.Component {
-	render() {
-		return  (
-			<div className={'b-control -float_left'}><input id="js-addField" className={'b-field'} type="text" placeholder="Add town or city"/></div>
 		);
 	}
 }
@@ -107,8 +80,8 @@ class Controlswrap extends React.Component {
 	render(){
 		return(
 			<div className={'l-control g-clearfix'}>
-				<Addfield />
-        <Addbutton onAddForecast={this.props.onAddForecast}/>
+				<div className={'b-control -float_left'}><input id="js-addField" className={'b-field'} type="text" placeholder="Add town or city"/></div>
+        <div className={'b-control -float_left'}><a onClick={this.props.onAddForecast} className={'b-button'} href="">Add</a></div>
 			</div>
 		);
 	}
@@ -218,7 +191,6 @@ class Currentweather extends React.Component {
 	}
 }
 
-
 /*right sidebar*/
 class Sidebar extends React.Component {
   render() {
@@ -268,14 +240,14 @@ class Main extends React.Component {
 
     for (let i = 0; i < weatherList.length; i++) {
       var item = weatherList[i];
-      forecasts.push(<Weather key={i.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.props.onRemoveForecast}/>); 
+      forecasts.push(<Weather key={i.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.onRemoveForecast.bind(this)}/>); 
     }
 
     return (
       <main className={'b-content'}>
         <div className={'b-content__inner g-clearfix'}>
           <Sidebar onAddForecast={this.onAddForecast.bind(this)}/>
-          <Columnleft forecasts={forecasts} onRemoveForecast={this.onRemoveForecast.bind(this)}/>
+          <Columnleft forecasts={forecasts}/>
         </div>
       </main>
     )
