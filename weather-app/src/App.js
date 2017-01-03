@@ -327,7 +327,6 @@ class Main extends React.Component {
           }
         });
 
-        ReactDOM.unmountComponentAtNode(messageContainer);
         if(isUsed === false) ReactDOM.render(<Message content={'The weather added.'}/>, messageContainer);
         else ReactDOM.render(<Message content={'The weather updated.'}/>, messageContainer);
 
