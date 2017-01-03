@@ -259,7 +259,6 @@ class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cities: 0,
       isUsed: false
     };
   }  
@@ -267,12 +266,16 @@ class Main extends React.Component {
   render() {
     let forecasts = [];
 
-    console.log('isUsed = ' + this.state.isUsed);
-
     for (let i = 0; i < weatherList.length; i++) {
       var item = weatherList[i];
+      console.log('i='+i);
       console.log(item);
-      forecasts.push(<Weather key={i.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.props.onRemoveForecast}/>); 
+      //if(this.state.isUsed === false) {
+        forecasts.push(<Weather key={i.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.props.onRemoveForecast}/>); 
+      //}
+      //else {
+        console.log('isUsed = ' + this.state.isUsed);
+      //}
     }
 
     return (
@@ -301,7 +304,7 @@ class Main extends React.Component {
     cityReq.onreadystatechange = (e) => {
       if (cityReq.readyState !== 4) return;
       if (cityReq.status === 200) {
-
+        
         var currentWeather = JSON.parse(cityReq.responseText),
             cityName = currentWeather.name,
             sys = currentWeather.sys,
@@ -322,6 +325,7 @@ class Main extends React.Component {
             cityWind = wind.speed;
 
         var index = -1, isUsed = false;
+
         for (let i = 0; i < weatherList.length; i++) {
           var item = weatherList[i];
           if(item.cityName === cityName) {
@@ -330,34 +334,41 @@ class Main extends React.Component {
           }
         }
 
-        weatherList.push(
-          {
-            cityName: cityName,
-            cityCountry: cityCountry,
-            cityLat: cityLat,
-            cityLon: cityLon,
-            cityDescr: cityDescr,
-            cityTemp: cityTemp,
-            cityMinTemp: cityMinTemp,
-            cityMaxTemp: cityMaxTemp,
-            cityPressure: cityPressure,
-            cityHumidity: cityHumidity,
-            cityWind: cityWind
-          }
-        );
+        var obj = {
+          cityName: cityName,
+          cityCountry: cityCountry,
+          cityLat: cityLat,
+          cityLon: cityLon,
+          cityDescr: cityDescr,
+          cityTemp: cityTemp,
+          cityMinTemp: cityMinTemp,
+          cityMaxTemp: cityMaxTemp,
+          cityPressure: cityPressure,
+          cityHumidity: cityHumidity,
+          cityWind: cityWind
+        }
 
+        if(isUsed === false) {
+          weatherList.push(obj);
+        }
+        else {
+          weatherList.splice(index, 1, obj);
+        }
+        
         this.setState(function(prevState, props) {
           return {
-            cities: prevState.cities + 1,
             isUsed: isUsed
           }
         });
 
         ReactDOM.unmountComponentAtNode(messageContainer);
         ReactDOM.render(<Message content={'The weather added to the table.'}/>, messageContainer);
+
       } else {
+
         ReactDOM.unmountComponentAtNode(messageContainer);
         ReactDOM.render(<Messageerror content={'Please enter the city.'}/>, messageContainer);
+
       }
     }; 
   }
