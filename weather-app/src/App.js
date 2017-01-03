@@ -223,10 +223,14 @@ if(localParsedWeather !== 'underfined') {
 //if(localParsedWeather.length > 0) weatherList = localParsedWeather;
 console.log(localParsedWeather);
 }*/
-/*weatherSerial = JSON.stringify(weatherList);
-localStorage.setItem('weatherKey', weatherSerial);
-localParsedWeather = JSON.parse(localStorage.getItem('weatherKey'));*/
-var weatherList = [];
+
+var weatherList = [], serialWeatherList, localWeatherList;
+
+localWeatherList = JSON.parse(localStorage.getItem('weatherKey'));
+
+if(localWeatherList !== null) weatherList = localWeatherList;
+
+console.log(localWeatherList);
 class Main extends React.Component {
   constructor(props) {
     super(props);
@@ -320,6 +324,10 @@ class Main extends React.Component {
         else {
           weatherList.splice(index, 1, obj);
         }
+
+        serialWeatherList = JSON.stringify(weatherList);
+        localStorage.setItem('weatherKey', serialWeatherList);
+        //localWeatherList = JSON.parse(localStorage.getItem('weatherKey'));
         
         this.setState(function(prevState, props) {
           return {
