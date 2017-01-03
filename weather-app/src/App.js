@@ -246,47 +246,33 @@ class Header extends React.Component {
 }
 
 /*main*/
-var weatherList = [], weatherSerial, localParsedWeather;
+/*var weatherSerial, localParsedWeather;
 if(localParsedWeather !== 'underfined') {
-  //if(localParsedWeather.length > 0) weatherList = localParsedWeather;
-  console.log(localParsedWeather);
-}
-
+//if(localParsedWeather.length > 0) weatherList = localParsedWeather;
+console.log(localParsedWeather);
+}*/
+/*weatherSerial = JSON.stringify(weatherList);
+localStorage.setItem('weatherKey', weatherSerial);
+localParsedWeather = JSON.parse(localStorage.getItem('weatherKey'));*/
+var weatherList = [];
 class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       cities: 0,
-      isUsed: false,
-      index: -1
+      isUsed: false
     };
   }  
 
   render() {
     let forecasts = [];
 
-    var item, key = 0;
+    console.log('isUsed = ' + this.state.isUsed);
 
-    for (let i = 0; i < this.state.cities; i++) {
-      for(let j = 0; j < weatherList.length; j++) {
-
-        item = weatherList[j];
-        key = ++key;
-        if(this.state.isUsed === false) {
-          forecasts.push(<Weather key={key.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.props.onRemoveForecast}/>);
-        }
-        else {
-          forecasts.splice(this.state.index, 1);
-          forecasts.push(<Weather key={key.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.props.onRemoveForecast}/>);
-        }
-
-        console.log('localParsedWeather', localParsedWeather);
-        weatherSerial = JSON.stringify(weatherList);
-        localStorage.setItem('weatherKey', weatherSerial);
-        localParsedWeather = JSON.parse(localStorage.getItem('weatherKey'));
-        console.log('WeatherReturn:');
-        console.log(localParsedWeather);
-      }
+    for (let i = 0; i < weatherList.length; i++) {
+      var item = weatherList[i];
+      console.log(item);
+      forecasts.push(<Weather key={i.toString()} city={item.cityName} country={item.cityCountry} lat={item.cityLat} lon={item.cityLon} descr={item.cityDescr} temp={item.cityTemp} minTemp={item.cityMinTemp} maxTemp={item.cityMaxTemp} pressure={item.cityPressure} humidity={item.cityHumidity} wind={item.cityWind} onRemoveForecast={this.props.onRemoveForecast}/>); 
     }
 
     return (
@@ -335,71 +321,37 @@ class Main extends React.Component {
             cityHumidity = main.humidity,
             cityWind = wind.speed;
 
-            var item, isUsed = false, index = -1;
+        var index = -1, isUsed = false;
+        for (let i = 0; i < weatherList.length; i++) {
+          var item = weatherList[i];
+          if(item.cityName === cityName) {
+            index = i;
+            isUsed = true;
+          }
+        }
 
-            for(let j = 0; j < weatherList.length; j++) {
-              item = weatherList[j];
-              if(item.cityName === cityName) {
-                isUsed = true;
-                index = j;
-                break;
-              }
-            }
+        weatherList.push(
+          {
+            cityName: cityName,
+            cityCountry: cityCountry,
+            cityLat: cityLat,
+            cityLon: cityLon,
+            cityDescr: cityDescr,
+            cityTemp: cityTemp,
+            cityMinTemp: cityMinTemp,
+            cityMaxTemp: cityMaxTemp,
+            cityPressure: cityPressure,
+            cityHumidity: cityHumidity,
+            cityWind: cityWind
+          }
+        );
 
-            if(isUsed === false) {
-              weatherList.push(
-                { num: this.state.cities,
-                  cityName: cityName,
-                  cityCountry: cityCountry,
-                  cityLat: cityLat,
-                  cityLon: cityLon,
-                  cityDescr: cityDescr,
-                  cityTemp: cityTemp,
-                  cityMinTemp: cityMinTemp,
-                  cityMaxTemp: cityMaxTemp,
-                  cityPressure: cityPressure,
-                  cityHumidity: cityHumidity,
-                  cityWind: cityWind
-                }
-              );
-
-              this.setState(function(prevState, props) {
-                return {
-                  cities: prevState.cities + 1,
-                  isUsed: !prevState.isUsed,
-                  index: -1
-                }
-              });
-            }
-            else {
-              weatherList.splice(index, 1);
-              weatherList.push(
-                { num: this.state.cities,
-                  cityName: cityName,
-                  cityCountry: cityCountry,
-                  cityLat: cityLat,
-                  cityLon: cityLon,
-                  cityDescr: cityDescr,
-                  cityTemp: cityTemp,
-                  cityMinTemp: cityMinTemp,
-                  cityMaxTemp: cityMaxTemp,
-                  cityPressure: cityPressure,
-                  cityHumidity: cityHumidity,
-                  cityWind: cityWind
-                }
-              );
-
-              this.setState(function(prevState, props) {
-                return {
-                  cities: prevState.cities,
-                  isUsed: !prevState.isUsed,
-                  index: index
-                }
-              });
-            }
-
-            isUsed = false;
-            index = -1;
+        this.setState(function(prevState, props) {
+          return {
+            cities: prevState.cities + 1,
+            isUsed: isUsed
+          }
+        });
 
         ReactDOM.unmountComponentAtNode(messageContainer);
         ReactDOM.render(<Message content={'The weather added to the table.'}/>, messageContainer);
