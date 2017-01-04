@@ -125,13 +125,14 @@
 .l-currentWeather {
 	margin: 40px 0 0;
 	clear: both;
-	text-align: left;
+	text-align: center;
 }
 .b-currentWeather {
 	display: block;
 	padding: 0 5px 0;
 	margin: 0;
 	list-style: none;
+  text-align: left;
 }
 .b-currentWeather__item {
   margin: 0 0 7px;
@@ -229,6 +230,10 @@
 }
 .b-message.-type_warning {
 	color: yellow;
+}
+
+.b-loading {
+  display: inline-block;
 }
 
 

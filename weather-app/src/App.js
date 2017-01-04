@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './normalize.css';
 import './main.css';
 
+
 /*Messeges*/
 var Message = React.createClass({
   render: function(props) {
@@ -127,6 +128,7 @@ var Currentweathercontent = React.createClass({
   }
 });
 
+var Loading = require('react-loading');
 class Currentweather extends React.Component {
 	constructor(props) {
     super(props);
@@ -182,7 +184,11 @@ class Currentweather extends React.Component {
 
 	render(){
 		return(
-			<div className={'l-currentWeather'} id="js-currentWeather"></div>
+			<div className={'l-currentWeather'} id="js-currentWeather">
+        <div className={'b-loading'}>
+          <Loading type='spinningBubbles' color='#e3e3e3'/>
+        </div>   
+      </div>
 		);
 	}
 
