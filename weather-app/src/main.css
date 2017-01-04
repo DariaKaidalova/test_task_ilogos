@@ -26,9 +26,10 @@
 .b-header__inner, .b-content__inner {
 	position: relative;
 	max-width: 1100px;
-	min-width: 600px;
+	min-width: 640px;
 	margin: 0 auto;
 }
+
 .b-header__inner {
 	padding: 23px 10px 20px;
 	color: #fff;
@@ -44,6 +45,7 @@
 .b-content {
 	min-height: calc(100vh - 75px);
 }
+
 .b-content__inner {
 	padding: 30px 10px;
 	min-height: calc(100vh - 135px);
@@ -52,18 +54,41 @@
   padding: 0 30px 0 0;
 	overflow: hidden;
   border-right: 1px solid #ccc;
-  min-height: calc(100vh - 135px);
+}
+@media screen and (max-width: 900px) {
+  .b-content__columnLeft {
+    padding-right: 0;
+    overflow: auto;
+    border: 0;
+  }
 }
 .b-content__columnLeft, .b-sidebar {
 	min-height: calc(100vh - 135px);
 }
 
+@media screen and (max-width: 900px) {
+  .b-content, .b-content__inner, .b-content__columnLeft, .b-sidebar {
+    min-height: initial;
+  }
+}
+
 /*sidebar*/
 .b-sidebar {
+  position: relative;
 	float: right;
 	width: 320px;
 	margin: 0 0 0 20px;
 	text-align: right;
+}
+
+@media screen and (max-width: 900px) {
+  .b-sidebar {
+    padding: 0 0 40px;
+    float: none;
+    width: auto;
+    margin: 0 0 20px;
+    overflow: hidden;
+  }
 }
 
 /*table*/
@@ -113,6 +138,13 @@
 	display: inline-block;
 	text-align: left;
 }
+
+@media screen and (max-width: 900px) {
+  .l-control {
+    display: block;
+    float: right;
+  }
+}
 .b-control {
 	float: left;
 	margin: 0 15px 0 0;
@@ -126,6 +158,13 @@
 	margin: 40px 0 0;
 	clear: both;
 	text-align: center;
+}
+@media screen and (max-width: 900px) {
+  .l-currentWeather {
+    clear: none;
+    float: left;
+    margin-top: 0;
+  }
 }
 .b-currentWeather {
 	display: block;
@@ -220,6 +259,15 @@
 	min-height: 21px;
 	margin: 7px 0 0;
 	clear: both;
+}
+@media screen and (max-width: 900px) {
+  .l-message.-type_adding {
+    margin-top: 0;
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+  }
 }
 .b-message {
 	color: green;

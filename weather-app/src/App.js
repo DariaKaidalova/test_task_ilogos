@@ -80,10 +80,12 @@ class Columnleft extends React.Component {
 class Controlswrap extends React.Component {
 	render(){
 		return(
-			<div className={'l-control g-clearfix'}>
-				<div className={'b-control -float_left'}><input id="js-addField" className={'b-field'} type="text" placeholder="Add town or city"/></div>
-        <div className={'b-control -float_left'}><a onClick={this.props.onAddForecast} className={'b-button'} href="">Add</a></div>
-			</div>
+			<div className={'l-control'}>
+        <div className={'g-clearfix'}>
+  				<div className={'b-control -float_left'}><input id="js-addField" className={'b-field'} type="text" placeholder="Add town or city"/></div>
+          <div className={'b-control -float_left'}><a onClick={this.props.onAddForecast} className={'b-button'} href="">Add</a></div>
+  			</div>
+      </div>
 		);
 	}
 }
@@ -203,7 +205,7 @@ class Sidebar extends React.Component {
     return  (
       <aside className={'b-sidebar'}>
         <Controlswrap onAddForecast={this.props.onAddForecast}/>
-        <div className={'l-message'} id="js-messageContainer"></div>
+        <div className={'l-message -type_adding'} id="js-messageContainer"></div>
         <Currentweather/>
       </aside>
     );
