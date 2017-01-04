@@ -218,7 +218,6 @@ class Header extends React.Component {
 }
 
 /*main*/
-
 class Main extends React.Component {
   constructor(props) {
     super(props);
