@@ -1,8 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './normalize.css';
-import './main.css';
-
 /*Messeges*/
 var Message = React.createClass({
   render: function(props) {
@@ -26,13 +21,13 @@ var Weather = React.createClass({
   render: function(props) {
     return (
       <tr id={this.props.city}>
-        <td className={'b-table__city'}>{this.props.place}, {this.props.country}</td>
+        <td className={'b-table__city'}>{this.props.city}, {this.props.country}</td>
         <td className={'b-table__coord'}>Lat: {this.props.lat}, Lon: {this.props.lon}</td>
         <td className={'b-table__weather'}>
           <div className={'b-table__weatherItem'}>Weather: {this.props.descr}</div>
-          <div className={'b-table__weatherItem'}>Temperature: {this.props.temp} ¬∞C</div>
-          <div className={'b-table__weatherItem'}>Minimum temperature: {this.props.minTemp} ¬∞C</div>
-          <div className={'b-table__weatherItem'}>Maximum temperature: {this.props.maxTemp} ¬∞C</div>
+          <div className={'b-table__weatherItem'}>Temperature: {this.props.temp} ∞C</div>
+          <div className={'b-table__weatherItem'}>Minimum temperature: {this.props.minTemp} ∞C</div>
+          <div className={'b-table__weatherItem'}>Maximum temperature: {this.props.maxTemp} ∞C</div>
           <div className={'b-table__weatherItem'}>Pressure: {this.props.pressure} hpa</div>
           <div className={'b-table__weatherItem'}>Humidity: {this.props.humidity} %</div>
           <div className={'b-table__weatherItem'}>Wind: {this.props.wind} m/s</div>
@@ -50,7 +45,7 @@ class Maintable extends React.Component {
       <table className={'b-table'}>
         <thead>
           <tr>
-            <th>Place</th>
+            <th>City</th>
             <th>Coordinates</th>
             <th>Weather forecast</th>
           </tr>
@@ -104,13 +99,13 @@ var Currentweathercontent = React.createClass({
 						<span className={'b-currentWeather__title'}>Weather:</span><span className={'b-currentWeather__val'}>{this.props.weather}</span>
 					</li>
 					<li className={'b-currentWeather__item'}>
-						<span className={'b-currentWeather__title'}>Temperature:</span><span className={'b-currentWeather__val'}>{this.props.temp} ¬∞C</span>
+						<span className={'b-currentWeather__title'}>Temperature:</span><span className={'b-currentWeather__val'}>{this.props.temp} ∞C</span>
 					</li>
 					<li className={'b-currentWeather__item'} >
-						<span className={'b-currentWeather__title'}>Minimum temperature:</span><span className={'b-currentWeather__val'}>{this.props.minTemp} ¬∞C</span>
+						<span className={'b-currentWeather__title'}>Minimum temperature:</span><span className={'b-currentWeather__val'}>{this.props.minTemp} ∞C</span>
 					</li>
 					<li className={'b-currentWeather__item'}>
-						<span className={'b-currentWeather__title'}>Maximum temperature:</span><span className={'b-currentWeather__val'}>{this.props.maxTemp} ¬∞C</span>
+						<span className={'b-currentWeather__title'}>Maximum temperature:</span><span className={'b-currentWeather__val'}>{this.props.maxTemp} ∞C</span>
 					</li>
 					<li className={'b-currentWeather__item'} >
 						<span className={'b-currentWeather__title'}>Pressure:</span><span className={'b-currentWeather__val'}>{this.props.pressure} hpa</span>
@@ -142,7 +137,7 @@ class Currentweather extends React.Component {
 				getCurrentData();
 			});
 		} 
-		else alert('Geolocation API –Ω–µ –ø–æ–¥–¥–µ—Ä–∂–∏–≤–∞–µ—Ç—Å—è –≤ –≤–∞—à–µ–º –±—Ä–∞—É–∑–µ—Ä–µ');
+		else alert('Geolocation API ÌÂ ÔÓ‰‰ÂÊË‚‡ÂÚÒˇ ‚ ‚‡¯ÂÏ ·‡ÛÁÂÂ');
 		
 		function getCurrentData() {
 			url = 'http://api.openweathermap.org/data/2.5/weather?lat='+currentLat+'&lon='+currentLon+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
@@ -204,43 +199,48 @@ class Sidebar extends React.Component {
   }
 }
 
-/*header*/
 class Header extends React.Component {
 	render() {
 		return  (
-			<header className={'b-header'}>
-        <div className={'b-header__inner'}>
-          <h1 className={'b-header__title'}>Let&#039;s find out the weather forecast!</h1>
+			<header>
+        <div>
+          <h1>Let&#039;s find out the weather forecast!</h1>
         </div>
       </header>
 		);
 	}
 }
 
-/*main*/
+//var weatherList = [], serialWeatherList, localWeatherList;
 
+//localWeatherList = JSON.parse(localStorage.getItem('weatherKey'));
+
+//if(localWeatherList !== null) weatherList = localWeatherList;
+
+//console.log(localWeatherList);
 class Main extends React.Component {
   constructor(props) {
-    super(props);
-    var localPlaces = JSON.parse(localStorage.getItem('placesKey')), placesVal = [];
-    if(localPlaces !== null) placesVal = localPlaces;
+    super(props);/*
     this.state = {
-      places: placesVal
+      isUsed: false
+    };*/
+    this.state = {
+      cities: []
     };
   }  
 
   render() {
-
+    console.log("Rendering", this.state.cities);
+    
     let forecasts = [];
 
-    for (let i = 0; i < this.state.places.length; i++) {
-      let places = this.state.places[i];
-      forecasts.push(<Weather key={i.toString()} place={places.placeName} country={places.placeCountry} lat={places.placeLat} lon={places.placeLon} descr={places.placeDescr} temp={places.placeTemp} minTemp={places.placeMinTemp} maxTemp={places.placeMaxTemp} pressure={places.placePressure} humidity={places.placeHumidity} wind={places.placeWind} onRemoveForecast={this.onRemoveForecast.bind(this, places.id)}/>); 
+    for (let i = 0; i < this.state.cities.length; i++) {
+      forecasts.push(<Weather onRemoveForecast={this.onRemoveForecast.bind(this, this.state.cities[i].id)}/>); 
     }
 
     return (
-      <main className={'b-content'}>
-        <div className={'b-content__inner g-clearfix'}>
+      <main>
+        <div>
           <Sidebar onAddForecast={this.onAddForecast.bind(this)}/>
           <Columnleft forecasts={forecasts}/>
         </div>
@@ -250,110 +250,78 @@ class Main extends React.Component {
 
   onAddForecast(e) {
     e.preventDefault();
-
-    var addFieldVal = document.getElementById('js-addField').value,
-        messageContainer = document.getElementById('js-messageContainer'),
-        url = 'http://api.openweathermap.org/data/2.5/weather?q='+addFieldVal+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
-  
+/*
     ReactDOM.unmountComponentAtNode(messageContainer);
 
-    var placeReq = new XMLHttpRequest();
-    placeReq.open('GET', url);
-    placeReq.send();
+    var cityReq = new XMLHttpRequest();
+    cityReq.open('GET', url);
+    cityReq.send();
 
-    placeReq.onreadystatechange = (e) => {
-      if (placeReq.readyState !== 4) return;
-      if (placeReq.status === 200) {
+    cityReq.onreadystatechange = (e) => {
+      if (cityReq.readyState !== 4) return;
+      if (cityReq.status === 200) {
 
-        var currentWeather = JSON.parse(placeReq.responseText),
-            placeName = currentWeather.name,
+        var currentWeather = JSON.parse(cityReq.responseText),
+            cityName = currentWeather.name,
             sys = currentWeather.sys,
-            placeCountry = sys.country,
+            cityCountry = sys.country,
             coord = currentWeather.coord,
-            placeLon = coord.lon,
-            placeLat = coord.lat,
+            cityLon = coord.lon,
+            cityLat = coord.lat,
             weather = currentWeather.weather,
             weatherArray =  weather[0],
             main = currentWeather.main,
             wind = currentWeather.wind,
-            placeDescr = weatherArray.description,
-            placeTemp = main.temp,
-            placeMinTemp = main.temp_min,
-            placeMaxTemp = main.temp_max,
-            placePressure = main.pressure,
-            placeHumidity = main.humidity,
-            placeWind = wind.speed;
+            cityDescr = weatherArray.description,
+            cityTemp = main.temp,
+            cityMinTemp = main.temp_min,
+            cityMaxTemp = main.temp_max,
+            cityPressure = main.pressure,
+            cityHumidity = main.humidity,
+            cityWind = wind.speed;
 
         var index = -1, isUsed = false;
 
-        for (let i = 0; i < this.state.places.length; i++) {
-          let places = this.state.places[i];
-          if(places.placeName === placeName) {
+        for (let i = 0; i < weatherList.length; i++) {
+          var item = weatherList[i];
+          if(item.cityName === cityName) {
             index = i;
             isUsed = true;
             break;
           }
         }
 
-        if(isUsed === false) {
-          this.setState((prevState, props) => {
-        
-            let newState = Array.from(prevState.places);
-            newState.push({
-              name: 'city ' + prevState.places.length,
-              id: prevState.places.length + 1,
-              placeName: placeName,
-              placeCountry: placeCountry,
-              placeLat: placeLat,
-              placeLon: placeLon,
-              placeDescr: placeDescr,
-              placeTemp: placeTemp,
-              placeMinTemp: placeMinTemp,
-              placeMaxTemp: placeMaxTemp,
-              placePressure: placePressure,
-              placeHumidity: placeHumidity,
-              placeWind: placeWind
-            });
+        var obj = {
+          cityName: cityName,
+          cityCountry: cityCountry,
+          cityLat: cityLat,
+          cityLon: cityLon,
+          cityDescr: cityDescr,
+          cityTemp: cityTemp,
+          cityMinTemp: cityMinTemp,
+          cityMaxTemp: cityMaxTemp,
+          cityPressure: cityPressure,
+          cityHumidity: cityHumidity,
+          cityWind: cityWind
+        }
 
-            console.log('isUsed = '+isUsed);
-            
-            return {
-              places: newState
-            };
-          });
+        if(isUsed === false) {
+          weatherList.push(obj);
         }
         else {
-          this.setState((prevState, props) => {
-            let newState = Array.from(prevState.places);
-            newState.splice(index, 1, {
-              name: 'city ' + prevState.places.length,
-              id: index,
-              placeName: placeName,
-              placeCountry: placeCountry,
-              placeLat: placeLat,
-              placeLon: placeLon,
-              placeDescr: placeDescr,
-              placeTemp: placeTemp,
-              placeMinTemp: placeMinTemp,
-              placeMaxTemp: placeMaxTemp,
-              placePressure: placePressure,
-              placeHumidity: placeHumidity,
-              placeWind: placeWind
-            });
-
-            console.log('isUsed = '+isUsed);
-
-            return {
-              places: newState
-            };
-          });
+          weatherList.splice(index, 1, obj);
         }
 
-        console.log(this.state.places);
+        serialWeatherList = JSON.stringify(weatherList);
+        localStorage.setItem('weatherKey', serialWeatherList);
+        //localWeatherList = JSON.parse(localStorage.getItem('weatherKey'));
+        
+        this.setState(function(prevState, props) {
+          return {
+            isUsed: isUsed
+          }
+        });
 
-        var serialPlaces = JSON.stringify(this.state.places);
-        localStorage.setItem('placesKey', serialPlaces);
-      
         if(isUsed === false) ReactDOM.render(<Message content={'The weather added.'}/>, messageContainer);
         else ReactDOM.render(<Message content={'The weather updated.'}/>, messageContainer);
 
@@ -363,7 +331,19 @@ class Main extends React.Component {
         ReactDOM.render(<Messageerror content={'Please enter the city.'}/>, messageContainer);
 
       }
-    };
+    }; */
+    this.setState((prevState, props) => {
+      
+      let newState = Array.from(prevState.cities);
+      newState.push({
+        name: "city " + prevState.cities.length,
+        id: prevState.cities.length + 1
+      });
+      
+      return {
+        cities: newState
+      };
+    });
   }
 
   onRemoveForecast(id, e) {
@@ -372,31 +352,25 @@ class Main extends React.Component {
     this.setState((prevState, props) => {
       let newState = [];
       
-      prevState.places.forEach((x) => {
-        if (x.id !== id)
+      prevState.cities.forEach((x) => {
+        if (x.id != id)
           newState.push(x);
       });
       
       return {
-        places: newState
+        cities: newState
       };
     });
   }
 }
 
-/*app*/
 class App extends React.Component {
 	render() {
 		return  (
-			<div className={'b-page'}>
+			<div>
 				<Header />
 				<Main />
 			</div>
 		);
 	}
 }
-
-export default App
-
-
-
