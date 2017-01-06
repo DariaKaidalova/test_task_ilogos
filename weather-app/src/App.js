@@ -4,7 +4,7 @@ import './normalize.css';
 import './main.css';
 
 
-/*Messeges*/
+/*messages*/
 var Message = React.createClass({
   render: function(props) {
     return (
