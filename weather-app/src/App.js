@@ -1,8 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-/*import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';*/
 import './normalize.css';
 import './main.css';
 
@@ -93,34 +90,7 @@ class Controlswrap extends React.Component {
 	}
 }
 
-/*
-//reducer
-const counter = (state = 0, action) => {
-  switch(action.type) {
-    case 'INCREMENT':
-      return state + 1;
-    case 'DECREMENT':
-      return state - 1;
-    default: 
-      return state;
-  }
-}
-
-const Counter = ({ 
-  value,
-  onIncrement,
-  onDecrement
-  }) => (
-  <div>
-    <div>{value}</div>
-    <button onClick={onIncrement} className={'b-button'}>+</button>
-    <button onClick={onDecrement} className={'b-button'}>-</button>
-  </div>
-)
-
-const store = createStore(counter);*/
-
-/*current weather block*/
+/*current weather wrap*/
 var Currentweathercontent = React.createClass({
   render: function(props) {
     return (
@@ -160,6 +130,7 @@ var Currentweathercontent = React.createClass({
   }
 });
 
+/*current weather content*/
 var Loading = require('react-loading');
 class Currentweather extends React.Component {
 	constructor(props) {
@@ -229,9 +200,6 @@ class Currentweather extends React.Component {
 		this.getCurrentWeather();
 	}
 }
-/*<Counter value={store.getState()} onIncrement={() = > store.dispatch({type: 'INCREMENT'})} onDecrement={() = > store.dispatch({type: 'DECREMENT'})}/>  
-store.subscribe(render);
-render();*/
 
 /*right sidebar*/
 class Sidebar extends React.Component {
