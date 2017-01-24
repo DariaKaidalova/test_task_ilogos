@@ -150,7 +150,7 @@ class Currentweather extends React.Component {
 		else alert('Geolocation API не поддерживается в вашем браузере');
 		
 		function getCurrentData() {
-			url = 'http://api.openweathermap.org/data/2.5/weather?lat='+currentLat+'&lon='+currentLon+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
+			url = 'api.openweathermap.org/data/2.5/weather?lat='+currentLat+'&lon='+currentLon+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
 		
 			currentPlaceReq = new XMLHttpRequest();
 			currentPlaceReq.open('GET', url);
@@ -262,7 +262,7 @@ class Main extends React.Component {
 
     var addFieldVal = document.getElementById('js-addField').value,
         messageContainer = document.getElementById('js-messageContainer'),
-        url = 'http://api.openweathermap.org/data/2.5/weather?q='+addFieldVal+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
+        url = 'api.openweathermap.org/data/2.5/weather?q='+addFieldVal+'&appid=1cf63a228c90f35807d7814f738e9d6d&units=metric';
   
     ReactDOM.unmountComponentAtNode(messageContainer);
 
