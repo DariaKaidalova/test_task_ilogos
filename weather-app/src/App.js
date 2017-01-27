@@ -242,6 +242,9 @@ class Main extends React.Component {
 
     let forecasts = [];
 
+    var serialPlaces = JSON.stringify(this.state.places);
+    localStorage.setItem('placesKey', serialPlaces);
+
     for (let i = 0; i < this.state.places.length; i++) {
       let places = this.state.places[i];
       forecasts.push(<Weather key={i.toString()} place={places.placeName} country={places.placeCountry} lat={places.placeLat} lon={places.placeLon} descr={places.placeDescr} temp={places.placeTemp} minTemp={places.placeMinTemp} maxTemp={places.placeMaxTemp} pressure={places.placePressure} humidity={places.placeHumidity} wind={places.placeWind} onRemoveForecast={this.onRemoveForecast.bind(this, places.id)}/>); 
@@ -323,8 +326,6 @@ class Main extends React.Component {
               placeHumidity: placeHumidity,
               placeWind: placeWind
             });
-
-            console.log('isUsed = '+isUsed);
             
             return {
               places: newState
@@ -350,19 +351,12 @@ class Main extends React.Component {
               placeWind: placeWind
             });
 
-            console.log('isUsed = '+isUsed);
-
             return {
               places: newState
             };
           });
         }
 
-        console.log(this.state.places);
-
-        var serialPlaces = JSON.stringify(this.state.places);
-        localStorage.setItem('placesKey', serialPlaces);
-      
         if(isUsed === false) ReactDOM.render(<Message content={'The weather added.'}/>, messageContainer);
         else ReactDOM.render(<Message content={'The weather updated.'}/>, messageContainer);
 
